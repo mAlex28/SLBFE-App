@@ -12,6 +12,7 @@ export const getAllCompanies = async (req, res) => {
     res.status(404).json({ message: error.message })
   }
 }
+
 export const getCompany = async (req, res) => {
   const { id } = req.params
 
@@ -26,6 +27,7 @@ export const getCompany = async (req, res) => {
     res.status(404).json({ message: error.message })
   }
 }
+
 export const updateCompany = async (req, res) => {
   // renamed the id
   const { id: _id } = req.params
@@ -44,6 +46,7 @@ export const updateCompany = async (req, res) => {
   )
   res.json(updatedCompany)
 }
+
 export const deleteCompany = async (req, res) => {
   const { id } = req.params
 

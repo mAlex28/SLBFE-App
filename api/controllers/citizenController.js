@@ -1,3 +1,4 @@
+import mongoose from 'mongoose'
 import bcrypt from 'bcryptjs'
 import jwt from 'jsonwebtoken'
 
@@ -99,4 +100,54 @@ export const signup = async (req, res) => {
   } catch (error) {
     res.status(500).json({ message: 'Something went wrong' })
   }
+}
+
+export const getAllCitizens = async (req, res) => {
+  try {
+    const citizens = await CitizenModel.find()
+    res.status(200).json(citizens)
+  } catch (error) {
+    res.status(404).json({ message: error.message })
+  }
+}
+
+export const getCitizen = async (req, res) => {
+  const { id } = req.params
+
+  if (!mongoose.Types.ObjectId.isValid(id))
+    return res.status(404).send('No citizen found')
+  try {
+    const citizen = await CitizenModel.findById(id)
+    res.status(200).json(citizen)
+  } catch (error) {
+    res.status(404).json({ message: error.message })
+  }
+}
+
+export const updateCitizen = async (req, res) => {
+  const { id: _id } = req.params
+  const citizen = req.body
+
+  // to make sure the id is valid
+  if (!mongoose.Types.ObjectId.isValid(_id))
+    return res.status(404).send('No citizen found')
+
+  const updatedCitizen = await CitizenModel.findByIdAndUpdate(
+    _id,
+    { ...citizen, _id },
+    {
+      new: true,
+    }
+  )
+  res.json(updatedCitizen)
+}
+
+export const deleteCitizen = async (req, res) => {
+  const { id } = req.params
+
+  // to make sure the id is valid
+  if (!mongoose.Types.ObjectId.isValid(id))
+    return res.status(404).send('No citizen found')
+
+  await CitizenModel.findByIdAndRemove(id)
 }
