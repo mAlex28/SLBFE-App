@@ -5,6 +5,8 @@ import cors from 'cors'
 import dotenv from 'dotenv'
 
 import companyRoutes from './routes/companyRoutes.js'
+import citizenRoutes from './routes/citizenRoutes.js'
+import officerRoutes from './routes/officerRoutes.js'
 
 const app = express()
 dotenv.config()
@@ -14,7 +16,9 @@ app.use(bodyParser.urlencoded({ limit: '30mb', extended: true }))
 app.use(cors())
 
 // using routes
-app.use('/companies', companyRoutes)
+app.use('/company', companyRoutes)
+app.use('/citizen', citizenRoutes)
+app.use('/officer', officerRoutes)
 
 const PORT = process.env.PORT || 5000
 

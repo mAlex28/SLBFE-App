@@ -2,16 +2,18 @@ import expres from 'express'
 import {
   getCompany,
   getAllCompanies,
-  createCompany,
   updateCompany,
   deleteCompany,
+  signin,
+  signup,
 } from '../controllers/companyController.js'
 
 const router = expres.Router()
 
-// http:localhost:5000/companies
+// http:localhost:5000/company
 router.get('/', getAllCompanies)
-router.post('/', createCompany)
+router.post('/signin', signin)
+router.post('/signup', signup)
 router.get('/:id', getCompany)
 router.patch('/:id', updateCompany)
 router.delete('/:id', deleteCompany)
