@@ -1,4 +1,7 @@
 import mongoose from 'mongoose'
+import bcrypt from 'bcryptjs'
+import jwt from 'jsonwebtoken'
+
 import CompanyModel from '../models/company.js'
 
 export const getAllCompanies = async (req, res) => {
@@ -21,17 +24,6 @@ export const getCompany = async (req, res) => {
     res.status(200).json(company)
   } catch (error) {
     res.status(404).json({ message: error.message })
-  }
-}
-export const createCompany = async (req, res) => {
-  const company = req.body
-  const newCompany = new CompanyModel(company)
-
-  try {
-    await newCompany.save()
-    res.status(201).json(newCompany)
-  } catch (error) {
-    res.status(409).json({ message: error.message })
   }
 }
 export const updateCompany = async (req, res) => {
@@ -61,4 +53,84 @@ export const deleteCompany = async (req, res) => {
 
   await CompanyModel.findByIdAndRemove(id)
 }
-export const getCompanyEmployees = async (req, res) => {}
+
+export const signin = async (req, res) => {
+  const { email, password } = req.body
+
+  try {
+    const existingUser = await CitizenModel.findOne({ email })
+    if (!existingUser)
+      return res.status(404).json({ message: "User doesn't exist" })
+
+    const isPasswordCorrect = await bcrypt.compare(
+      password,
+      existingUser.password
+    )
+    if (!isPasswordCorrect)
+      return res.status(404).json({ message: 'Invalid credentials' })
+
+    const token = jwt.sign(
+      { email: existingUser.email, id: existingUser._id },
+      'test',
+      { expiresIn: '5h' }
+    )
+
+    res.status(200).json({
+      result: existingUser,
+      token,
+    })
+  } catch (error) {
+    res.status(500).json({ message: 'Something went wrong' })
+  }
+}
+
+export const signup = async (req, res) => {
+  const {
+    companyName,
+    description,
+    contact,
+    address,
+    city,
+    province,
+    country,
+    email,
+    password,
+    companyFields,
+    confirmPassword,
+  } = req.body
+
+  try {
+    const existingUser = await CitizenModel.findOne({ email })
+    if (existingUser)
+      return res.status(404).json({ message: 'User already exist' })
+
+    if (password !== confirmPassword)
+      return res.status(404).json({ message: "Passwords don't match" })
+
+    const hashedPassword = await bcrypt.hash(password, 12)
+
+    const result = await CitizenModel.create({
+      companyName,
+      description,
+      contact,
+      address,
+      city,
+      province,
+      country,
+      email,
+      password: hashedPassword,
+      companyFields,
+    })
+
+    const token = jwt.sign({ email: result.email, id: result._id }, 'test', {
+      expiresIn: '5h',
+    })
+
+    res.status(200).json({
+      result,
+      token,
+    })
+  } catch (error) {
+    res.status(500).json({ message: 'Something went wrong' })
+  }
+}
