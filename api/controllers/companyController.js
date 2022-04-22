@@ -61,7 +61,7 @@ export const signin = async (req, res) => {
   const { email, password } = req.body
 
   try {
-    const existingUser = await CitizenModel.findOne({ email })
+    const existingUser = await CompanyModel.findOne({ email })
     if (!existingUser)
       return res.status(404).json({ message: "User doesn't exist" })
 
@@ -103,7 +103,7 @@ export const signup = async (req, res) => {
   } = req.body
 
   try {
-    const existingUser = await CitizenModel.findOne({ email })
+    const existingUser = await CompanyModel.findOne({ email })
     if (existingUser)
       return res.status(404).json({ message: 'User already exist' })
 
@@ -112,7 +112,7 @@ export const signup = async (req, res) => {
 
     const hashedPassword = await bcrypt.hash(password, 12)
 
-    const result = await CitizenModel.create({
+    const result = await CompanyModel.create({
       companyName,
       description,
       contact,
@@ -134,6 +134,35 @@ export const signup = async (req, res) => {
       token,
     })
   } catch (error) {
+    console.log(error)
     res.status(500).json({ message: 'Something went wrong' })
+  }
+}
+
+export const getCompanyByNameSearch = async (req, res) => {
+  const { companyName } = req.query
+
+  try {
+    const company = await CompanyModel.find({ companyName })
+
+    res.json({ data: company })
+  } catch (error) {
+    res.status(404).json({ message: error.message })
+  }
+}
+
+export const getCompanyByQualificationSearch = async (req, res) => {
+  const { searchQuery, companyFields } = req.query
+
+  try {
+    const title = new RegExp(searchQuery, 'i')
+
+    const company = await CompanyModel.find({
+      $or: [{ title }, { companyFields: { $in: companyFields.split(',') } }],
+    })
+
+    res.json({ data: company })
+  } catch (error) {
+    res.status(404).json({ message: error.message })
   }
 }

@@ -47,7 +47,7 @@ export const signup = async (req, res) => {
     city,
     province,
     latitude,
-    longitue,
+    longitude,
     profession,
     email,
     qualifications,
@@ -78,8 +78,10 @@ export const signup = async (req, res) => {
       postalCode,
       city,
       province,
-      latitude,
-      longitue,
+      location: {
+        latitude,
+        longitude,
+      },
       profession,
       email,
       qualifications,
@@ -98,6 +100,7 @@ export const signup = async (req, res) => {
       token,
     })
   } catch (error) {
+    console.log(error)
     res.status(500).json({ message: 'Something went wrong' })
   }
 }
@@ -150,4 +153,44 @@ export const deleteCitizen = async (req, res) => {
     return res.status(404).send('No citizen found')
 
   await CitizenModel.findByIdAndRemove(id)
+}
+
+export const getCitizenByNICSearch = async (req, res) => {
+  const { nic } = req.query
+
+  try {
+    const citizens = await CitizenModel.find({ nic })
+
+    res.json({ data: citizens })
+  } catch (error) {
+    res.status(404).json({ message: error.message })
+  }
+}
+
+export const getCitizenByNameSearch = async (req, res) => {
+  const { name } = req.query
+
+  try {
+    const citizens = await CitizenModel.find({ name })
+
+    res.json({ data: citizens })
+  } catch (error) {
+    res.status(404).json({ message: error.message })
+  }
+}
+
+export const getCitizenByQualificationSearch = async (req, res) => {
+  const { searchQuery, qualifications } = req.query
+
+  try {
+    const title = new RegExp(searchQuery, 'i')
+
+    const citizens = await CitizenModel.find({
+      $or: [{ title }, { qualifications: { $in: qualifications.split(',') } }],
+    })
+
+    res.json({ data: citizens })
+  } catch (error) {
+    res.status(404).json({ message: error.message })
+  }
 }
