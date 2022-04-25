@@ -2,10 +2,14 @@ import mongoose from 'mongoose'
 
 const complainSchema = mongoose.Schema(
   {
-    userId: { type: String, required: true },
+    creator: String,
     complainTitle: { type: String, required: true },
     complainText: { type: String, required: true },
     email: { type: String, required: true },
+    createdAt: {
+      type: Date,
+      default: new Date(),
+    },
   },
   { timestamps: true }
 )

@@ -1,4 +1,4 @@
-import ComplainModel from '../models/complains'
+import ComplainModel from '../models/complains.js'
 
 export const getAllComplains = async (req, res) => {
   try {
@@ -11,9 +11,16 @@ export const getAllComplains = async (req, res) => {
 }
 
 export const makeComplains = async (req, res) => {
-  const { firstName, lastName, email, password, confirmPassword } = req.body
+  const complain = req.body
+
+  const newComplains = new PostMessage({
+    ...complain,
+    creator: req.userId,
+    createdAt: new Date().toISOString(),
+  })
 
   try {
+    await newComplains.save()
   } catch (error) {
     res.status(500).json({ message: 'Something went wrong' })
   }

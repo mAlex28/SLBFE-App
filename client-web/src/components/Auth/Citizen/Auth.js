@@ -1,4 +1,6 @@
-import React, { useEffect, useState, useCallback } from 'react'
+import React, { useEffect, useState } from 'react'
+import { useDispatch } from 'react-redux'
+import { useNavigate } from 'react-router-dom'
 import {
   Avatar,
   Button,
@@ -9,11 +11,15 @@ import {
   TextField,
   Autocomplete,
   Chip,
+  Alert,
+  AlertTitle,
 } from '@mui/material'
 import LockOutlined from '@mui/icons-material/LockOutlined'
 import FileBase from 'react-file-base64'
 
 import Input from '../Input'
+import { signin, signup } from '../../../actions/citizens'
+import { AUTH } from '../../../constants/actionTypes'
 
 const initialState = {
   nic: '',
@@ -41,20 +47,55 @@ const initialState = {
 const SignUp = () => {
   const [form, setForm] = useState(initialState)
   const [isSignup, setIsSignup] = useState(false)
-
-  const [location, setLocation] = useState(null)
   const [showPassword, setShowPassword] = useState(false)
+  const [isError, setIsError] = useState(false)
   const handleShowPassword = () => setShowPassword(!showPassword)
+  const dispatch = useDispatch()
+  const navigate = useNavigate()
 
-  // get current location of the user and assign it to the TextField
-  navigator.geolocation.getCurrentPosition((position) => {
-    setLocation(`${position.coords.latitude}, ${position.coords.longitude}`)
+  var options = {
+    enableHighAccuracy: true,
+    timeout: 5000,
+    maximumAge: 0,
+  }
+
+  const onLocationAccessSucces = (position) => {
     setForm({
       ...form,
       latitude: position.coords.latitude,
       longitude: position.coords.longitude,
     })
-  })
+    setIsError(false)
+  }
+
+  const onLocationAccessError = (error) => {
+    console.warn(`ERROR(${error.code}): ${error.message}`)
+    setIsError(true)
+  }
+
+  useEffect(() => {
+    if (isSignup) {
+      if (navigator.geolocation) {
+        navigator.permissions.query({ name: 'geolocation' }).then((result) => {
+          if (result.state === 'granted') {
+            console.log(result.state)
+            navigator.geolocation.getCurrentPosition(onLocationAccessSucces)
+          } else if (result.state === 'prompt') {
+            navigator.geolocation.getCurrentPosition(
+              onLocationAccessSucces,
+              onLocationAccessError,
+              options
+            )
+          } else if (result.state === 'denied') {
+            setIsError(true)
+          }
+          result.onchange = () => {
+            console.log(result.state)
+          }
+        })
+      }
+    }
+  }, [isSignup])
 
   const switchMode = () => {
     setForm(initialState)
@@ -66,8 +107,15 @@ const SignUp = () => {
     e.preventDefault()
 
     if (isSignup) {
-      console.log(form)
+      if (!isError) {
+        setIsError(false)
+
+        dispatch(signup(form, navigate))
+      } else {
+        setIsError(true)
+      }
     } else {
+      dispatch(signin(form, navigate))
     }
   }
 
@@ -94,6 +142,12 @@ const SignUp = () => {
         }}
         elevation={6}
       >
+        {isError && (
+          <Alert severity="error" sx={{}}>
+            <AlertTitle>Location Denied</AlertTitle>
+            Please turn on location to fill out the form
+          </Alert>
+        )}
         <Avatar
           sx={{
             margin: '10px',
@@ -105,6 +159,7 @@ const SignUp = () => {
         <Typography component="h1" variant="h5">
           {isSignup ? 'Sign up' : 'Sign in'}
         </Typography>
+
         <form
           autoComplete="off"
           onSubmit={handleSubmit}
@@ -182,22 +237,15 @@ const SignUp = () => {
                 />
                 <Grid item xs={12} sm={12}>
                   <TextField
-                    label="Location"
-                    name="latitude"
-                    defaultValue={location}
-                    fullWidth
-                  />
-                </Grid>
-                <Grid item xs={12} sm={12}>
-                  <TextField
                     id="outlined-multiline-static"
                     label="Description"
                     name="description"
                     multiline
                     required
-                    placeholder="Write something about yourself"
+                    placeholder="Write something about you"
                     rows={4}
                     fullWidth
+                    onChange={handleChange}
                   />
                 </Grid>
                 <Grid item xs={12} sm={12}>
