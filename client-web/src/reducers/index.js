@@ -1,5 +1,6 @@
 import { combineReducers } from 'redux'
 
-import citizen from './authCitizen'
+import auth from './authCitizen'
+import citizens from './citizens'
 
-export const reducers = combineReducers({ citizen })
+export const reducers = combineReducers({ auth, citizens })

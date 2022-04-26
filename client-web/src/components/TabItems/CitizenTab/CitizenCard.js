@@ -14,8 +14,15 @@ import PhoneInTalkIcon from '@mui/icons-material/PhoneInTalk'
 import EmailIcon from '@mui/icons-material/Email'
 import CloseIcon from '@mui/icons-material/Close'
 import { red } from '@mui/material/colors'
+import { Link, useNavigate } from 'react-router-dom'
 
-const CitizenCard = () => {
+const CitizenCard = ({ citizen }) => {
+  const navigate = useNavigate()
+
+  const viewCitizen = (e) => {
+    navigate(`/citizen/${citizen._id}`)
+  }
+
   return (
     <Card
       elevation={5}
@@ -27,43 +34,87 @@ const CitizenCard = () => {
       }}
     >
       <CardHeader
+        onClick={viewCitizen}
         avatar={
-          <Avatar sx={{ bgcolor: red[500] }} aria-label="recipe">
-            R
-          </Avatar>
+          citizen.profilePic ? (
+            <Avatar
+              alt={citizen.name}
+              src={citizen.profilePic}
+              aria-label="avatar"
+            />
+          ) : (
+            <Avatar sx={{ bgcolor: red[500] }} aria-label="avatar">
+              {citizen.name.charAt(0)}
+            </Avatar>
+          )
         }
         action={
-          <Button
-            variant="outlined"
-            color="success"
-            startIcon={
-              <DoneIcon
-                sx={{
-                  color: '#4caf50',
-                }}
-              />
-            }
-          >
-            Verified
-          </Button>
+          citizen.isVerified ? (
+            <Button
+              variant="outlined"
+              color="success"
+              startIcon={
+                <DoneIcon
+                  sx={{
+                    color: '#4caf50',
+                  }}
+                />
+              }
+            >
+              Verified
+            </Button>
+          ) : (
+            <Button
+              variant="outlined"
+              color="warning"
+              startIcon={
+                <CloseIcon
+                  sx={{
+                    color: '#4caf50',
+                  }}
+                />
+              }
+            >
+              Not Verified
+            </Button>
+          )
         }
-        title="Perera Sons"
-        subheader="Software Engineer"
+        title={citizen.name}
+        subheader={citizen.profession}
       />
       <CardContent>
         <Typography variant="body2" color="text.secondary">
-          This impressive paella is a perfect party dish and a fun meal to cook
-          together with your guests. Add 1 cup of frozen peas along with the
-          mussels, if you like.
+          {citizen.description.split(' ').splice(0, 20).join(' ')}...
         </Typography>
       </CardContent>
+      <div
+        style={{
+          display: 'flex',
+          justifyContent: 'space-between',
+          margin: '20px',
+        }}
+      >
+        <Typography variant="body2" color="GrayText" component="p">
+          {citizen.qualifications.map((qualification) => `#${qualification} `)}
+        </Typography>
+      </div>
       <CardActions disableSpacing>
-        <IconButton aria-label="add to favorites">
-          <PhoneInTalkIcon />
-        </IconButton>
-        <IconButton aria-label="share">
-          <EmailIcon />
-        </IconButton>
+        <Link
+          to="#"
+          onClick={() => (window.location.href = `mailto:${citizen.contact}`)}
+        >
+          <IconButton aria-label="call">
+            <PhoneInTalkIcon />
+          </IconButton>
+        </Link>
+        <Link
+          to="#"
+          onClick={() => (window.location.href = `tel:${citizen.email}`)}
+        >
+          <IconButton aria-label="email">
+            <EmailIcon />
+          </IconButton>
+        </Link>
       </CardActions>
     </Card>
   )

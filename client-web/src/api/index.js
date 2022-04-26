@@ -19,13 +19,12 @@ export const deleteCitizen = (id) => API.delete(`/citizen/${id}`)
 export const updateCitizen = (id, updatedCitizen) =>
   API.patch(`/citizen/${id}`, updatedCitizen)
 export const fetchCitizen = (id) => API.get(`/citizen/${id}`)
-export const getUser = (id) => API.get(`/citizen?userId=${id}`)
 export const fetchCitizens = (page) => API.get(`/citizen?page=${page}`)
 export const fetchCitizensByName = (name) =>
   API.get(`/citizen/citizenname?name=${name}`)
 export const fetchCitizensBySearch = (searchQuery) =>
   API.get(
-    `/posts/search?searchQuery=${
+    `/citizen/search?searchQuery=${
       searchQuery.searchQuery || 'none'
     }&qualifications=${searchQuery.qualifications}`
   )

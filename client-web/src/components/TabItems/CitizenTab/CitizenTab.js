@@ -6,19 +6,43 @@ import {
   Grid,
   Autocomplete,
   Chip,
+  Paper,
 } from '@mui/material'
+import { useNavigate, useLocation } from 'react-router-dom'
+import { useDispatch } from 'react-redux'
 
-import CitizenCard from './CitizenCard'
+import { getCitizensBySearch } from '../../../actions/citizens'
+import CitizenCards from './CitizenCards'
+import Pagination from '../../Pagination'
+
+function useQuery() {
+  return new URLSearchParams(useLocation().search)
+}
 
 const CitizenTab = () => {
-  const [qualifications, setQualifications] = useState([])
+  const query = useQuery()
   const [search, setSearch] = useState('')
+  const [qualifications, setQualifications] = useState([])
+  const page = query.get('page') || 1
+  const searchQuery = query.get('searchQuery')
+  const dispatch = useDispatch()
+  const navigate = useNavigate()
 
   const searchPost = () => {
     if (search.trim() || qualifications) {
-      console.log(qualifications)
+      dispatch(
+        getCitizensBySearch({
+          search,
+          qualifications: qualifications.join(','),
+        })
+      )
+      navigate(
+        `/citizen/search?searchQuery=${
+          search || 'none'
+        }&qualifications=${qualifications.join(',')}`
+      )
     } else {
-      console.log('error')
+      navigate('/')
     }
   }
 
@@ -34,11 +58,7 @@ const CitizenTab = () => {
   return (
     <>
       <Grid item xs={12} sm={6} md={9}>
-        <CitizenCard />
-        <CitizenCard />
-        <CitizenCard />
-        <CitizenCard />
-        <CitizenCard />
+        <CitizenCards />
       </Grid>
       <Grid item xs={12} sm={6} md={3}>
         <AppBar
@@ -99,6 +119,18 @@ const CitizenTab = () => {
             Search
           </Button>
         </AppBar>
+        {!searchQuery && qualifications.length && (
+          <Paper
+            sx={{
+              borderRadius: 4,
+              marginTop: '1rem',
+              padding: '16px',
+            }}
+            elevation={6}
+          >
+            <Pagination page={page} />
+          </Paper>
+        )}
       </Grid>
     </>
   )

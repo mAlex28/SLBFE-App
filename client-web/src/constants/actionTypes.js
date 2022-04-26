@@ -10,7 +10,6 @@ export const FETCH_BY_CITIZEN_NAME = 'FETCH_BY_CITIZEN_NAME'
 
 export const AUTH = 'AUTH'
 export const LOGOUT_CITIZEN = 'LOGOUT_CITIZEN'
-export const GET_CITIZEN = 'GET_CITIZEN'
 
 // OFFICERS
 export const AUTH_OFFICER = 'AUTH_OFFICER'

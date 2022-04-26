@@ -19,7 +19,6 @@ import FileBase from 'react-file-base64'
 
 import Input from '../Input'
 import { signin, signup } from '../../../actions/citizens'
-import { AUTH } from '../../../constants/actionTypes'
 
 const initialState = {
   nic: '',
@@ -52,7 +51,7 @@ const SignUp = () => {
   const [isError, setIsError] = useState(false)
   const handleShowPassword = () => setShowPassword(!showPassword)
   const dispatch = useDispatch()
-  const navigate = useNavigate()
+  const history = useNavigate()
 
   var options = {
     enableHighAccuracy: true,
@@ -109,14 +108,14 @@ const SignUp = () => {
 
     if (isSignup) {
       if (!isError) {
-        console.log(form)
-        dispatch(signup(form, navigate))
         setIsError(false)
+
+        dispatch(signup(form, history))
       } else {
         setIsError(true)
       }
     } else {
-      dispatch(signin(form, navigate))
+      dispatch(signin(form, history))
     }
   }
 
@@ -238,7 +237,7 @@ const SignUp = () => {
                 />
                 <Input
                   name="profession"
-                  label="Profession"
+                  label="Profession eg: Software Engineer"
                   handleChange={handleChange}
                   autoFocus
                 />

@@ -4,15 +4,12 @@ import ReactDOM from 'react-dom/client'
 import thunk from 'redux-thunk'
 import './index.css'
 import App from './App'
-import {
-  legacy_createStore as createStore,
-  applyMiddleware,
-  compose,
-} from 'redux'
+import { legacy_createStore as createStore, applyMiddleware } from 'redux'
 import { reducers } from './reducers'
+import { composeWithDevTools } from 'redux-devtools-extension'
 
 const root = ReactDOM.createRoot(document.getElementById('root'))
-const store = createStore(reducers, {}, compose(applyMiddleware(thunk)))
+const store = createStore(reducers, composeWithDevTools(applyMiddleware(thunk)))
 
 root.render(
   <Provider store={store}>

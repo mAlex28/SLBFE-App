@@ -1,8 +1,11 @@
 import mongoose from 'mongoose'
+import express from 'express'
 import bcrypt from 'bcryptjs'
 import jwt from 'jsonwebtoken'
 
 import CitizenModel from '../models/citizen.js'
+
+const router = express.Router()
 export const signin = async (req, res) => {
   const { email, password } = req.body
 
@@ -100,15 +103,29 @@ export const signup = async (req, res) => {
       token,
     })
   } catch (error) {
-    console.log(error)
     res.status(500).json({ message: 'Something went wrong' })
   }
 }
 
 export const getAllCitizens = async (req, res) => {
+  const { page } = req.query
+
   try {
+    // paging the response
+    const LIMIT = 8
+    const startIndex = (Number(page) - 1) * LIMIT
+
+    const total = await CitizenModel.countDocuments()
     const citizens = await CitizenModel.find()
-    res.status(200).json(citizens)
+      .sort({ _id: -1 })
+      .limit(LIMIT)
+      .skip(startIndex)
+
+    res.json({
+      data: citizens,
+      currentPage: Number(page),
+      numberOfPages: Math.ceil(total / LIMIT),
+    })
   } catch (error) {
     res.status(404).json({ message: error.message })
   }
@@ -195,3 +212,5 @@ export const getCitizenBySearch = async (req, res) => {
     res.status(404).json({ message: error.message })
   }
 }
+
+export default router

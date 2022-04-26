@@ -13,11 +13,11 @@ dotenv.config()
 
 app.use(bodyParser.json({ limit: '30mb', extended: true }))
 app.use(bodyParser.urlencoded({ limit: '30mb', extended: true }))
-app.use(cors({ credentials: true }))
+app.use(cors())
 
 // using routes
-app.use('/company', companyRoutes)
 app.use('/citizen', citizenRoutes)
+app.use('/company', companyRoutes)
 app.use('/officer', officerRoutes)
 
 const PORT = process.env.PORT || 5000

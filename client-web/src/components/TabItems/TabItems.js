@@ -1,8 +1,16 @@
 import React, { useState } from 'react'
 import { Box, Tabs, Tab, Grow, Container, Grid } from '@mui/material'
 import PropTypes from 'prop-types'
+import { styled } from '@mui/material/styles'
+
 import CitizenTab from './CitizenTab/CitizenTab'
 
+const Root = styled('div')(({ theme }) => ({
+  [theme.breakpoints.down('xs')]: {
+    flexDirection: 'column-reverse',
+    justify: 'center',
+  },
+}))
 function TabPanel(props) {
   const { children, value, index, ...other } = props
 
@@ -17,14 +25,16 @@ function TabPanel(props) {
       {value === index && (
         <Grow in>
           <Container maxWidth="xl">
-            <Grid
-              container
-              justify="space-between"
-              alignItems="stretch"
-              spacing={3}
-            >
-              {children}
-            </Grid>
+            <Root>
+              <Grid
+                container
+                justify="space-between"
+                alignItems="stretch"
+                spacing={3}
+              >
+                {children}
+              </Grid>
+            </Root>
           </Container>
         </Grow>
       )}

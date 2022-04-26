@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react'
 import { useDispatch } from 'react-redux'
-// import decode from 'jwt-decode'
+import decode from 'jwt-decode'
 import { Link, useNavigate, useLocation } from 'react-router-dom'
 
 import {
@@ -20,10 +20,11 @@ import {
 import logo from '../../images/logo.png'
 import * as actionType from '../../constants/actionTypes'
 
-const settings = ['Profile', 'Complain', 'Logout']
+const settings = ['Profile', 'Complain']
 
 const Navbar = () => {
   const [user, setUser] = useState(JSON.parse(localStorage.getItem('profile')))
+
   const dispatch = useDispatch()
   const location = useLocation()
   const navigate = useNavigate()
@@ -32,9 +33,20 @@ const Navbar = () => {
 
   const logout = () => {
     dispatch({ type: actionType.LOGOUT_CITIZEN })
-    navigate.push('/auth')
+    navigate('/')
     setUser(null)
   }
+
+  useEffect(() => {
+    const token = user?.token
+    if (token) {
+      const decodedToken = decode(token)
+
+      if (decodedToken.exp * 1000 < new Date().getTime()) logout()
+    }
+
+    setUser(JSON.parse(localStorage.getItem('profile')))
+  }, [location])
 
   const handleOpenUserMenu = (event) => {
     setAnchorElUser(event.currentTarget)
@@ -68,9 +80,15 @@ const Navbar = () => {
                 <Tooltip title="Open settings">
                   <IconButton onClick={handleOpenUserMenu} sx={{ p: 0 }}>
                     <Avatar
-                      alt="Remy Sharp"
-                      src="/static/images/avatar/2.jpg"
+                      alt={user?.result.name}
+                      src={user?.result.profilePic}
+                      sx={{
+                        margin: '0 10px',
+                      }}
                     />
+                    <Typography color="whitesmoke" variant="h6">
+                      {user?.result.name}
+                    </Typography>
                   </IconButton>
                 </Tooltip>
                 <Menu
@@ -95,7 +113,12 @@ const Navbar = () => {
                     </MenuItem>
                   ))}
                 </Menu>
-                <Button variant="contained" color="secondary" onClick={logout}>
+                <Button
+                  sx={{ marginLeft: '10px' }}
+                  variant="contained"
+                  color="primary"
+                  onClick={logout}
+                >
                   Logout
                 </Button>
               </div>

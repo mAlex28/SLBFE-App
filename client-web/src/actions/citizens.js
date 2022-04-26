@@ -6,42 +6,29 @@ import {
   FETCH_BY_CITIZEN_NAME,
   FETCH_CITIZEN,
   FETCH_CITIZEN_BY_SEARCH,
-  GET_CITIZEN,
   START_LOADING,
   UPDATE_CITIZEN,
 } from '../constants/actionTypes'
 import * as api from '../api/index.js'
 
-export const signin = (formData, router) => async (dispatch) => {
+export const signin = (formData, history) => async (dispatch) => {
   try {
     const { data } = await api.citizenSignIn(formData)
 
     dispatch({ type: AUTH, data })
 
-    router.push('/')
+    history('/citizen')
   } catch (error) {
     console.log(error)
   }
 }
-export const signup = (formData, router) => async (dispatch) => {
+export const signup = (formData, history) => async (dispatch) => {
   try {
     const { data } = await api.citizenSignUp(formData)
-    console.log(data)
 
     dispatch({ type: AUTH, data })
-    console.log('afteridspatch', data)
 
-    router.push('/')
-  } catch (error) {
-    console.log(error)
-  }
-}
-
-export const getUser = (id) => async (dispatch) => {
-  try {
-    const { data } = await api.getUser(id)
-
-    dispatch({ type: GET_CITIZEN, payload: { user: data } })
+    history('/')
   } catch (error) {
     console.log(error)
   }
@@ -65,6 +52,7 @@ export const getAllCitizens = (page) => async (dispatch) => {
       data: { data, currentPage, numberOfPages },
     } = await api.fetchCitizens(page)
 
+    console.log(data)
     dispatch({
       type: FETCH_ALL_CITIZENS,
       payload: { data, currentPage, numberOfPages },
