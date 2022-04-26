@@ -20,6 +20,10 @@ app.use('/citizen', citizenRoutes)
 app.use('/company', companyRoutes)
 app.use('/officer', officerRoutes)
 
+app.get('/', (req, res) => {
+  res.send('API is running')
+})
+
 const PORT = process.env.PORT || 5000
 
 mongoose
