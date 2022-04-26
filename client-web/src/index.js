@@ -9,7 +9,11 @@ import { reducers } from './reducers'
 import { composeWithDevTools } from 'redux-devtools-extension'
 
 const root = ReactDOM.createRoot(document.getElementById('root'))
-const store = createStore(reducers, composeWithDevTools(applyMiddleware(thunk)))
+const store = createStore(
+  reducers,
+  {},
+  composeWithDevTools(applyMiddleware(thunk))
+)
 
 root.render(
   <Provider store={store}>

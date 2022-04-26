@@ -5,9 +5,24 @@ import jwt from 'jsonwebtoken'
 import CompanyModel from '../models/company.js'
 
 export const getAllCompanies = async (req, res) => {
+  const { page } = req.query
+
   try {
+    // paging the response
+    const LIMIT = 8
+    const startIndex = (Number(page) - 1) * LIMIT
+
+    const total = await CompanyModel.countDocuments()
     const companies = await CompanyModel.find()
-    res.status(200).json(companies)
+      .sort({ _id: -1 })
+      .limit(LIMIT)
+      .skip(startIndex)
+
+    res.json({
+      data: companies,
+      currentPage: Number(page),
+      numberOfPages: Math.ceil(total / LIMIT),
+    })
   } catch (error) {
     res.status(404).json({ message: error.message })
   }
