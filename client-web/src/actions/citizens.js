@@ -26,8 +26,10 @@ export const signin = (formData, router) => async (dispatch) => {
 export const signup = (formData, router) => async (dispatch) => {
   try {
     const { data } = await api.citizenSignUp(formData)
+    console.log(data)
 
     dispatch({ type: AUTH, data })
+    console.log('afteridspatch', data)
 
     router.push('/')
   } catch (error) {

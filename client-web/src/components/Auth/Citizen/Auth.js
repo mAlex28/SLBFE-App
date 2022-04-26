@@ -36,6 +36,7 @@ const initialState = {
   latitude: '',
   longitude: '',
   email: '',
+  profession: '',
   qualifications: [],
   birthCertificate: '',
   cv: '',
@@ -108,9 +109,9 @@ const SignUp = () => {
 
     if (isSignup) {
       if (!isError) {
-        setIsError(false)
-
+        console.log(form)
         dispatch(signup(form, navigate))
+        setIsError(false)
       } else {
         setIsError(true)
       }
@@ -234,6 +235,12 @@ const SignUp = () => {
                   handleChange={handleChange}
                   autoFocus
                   half
+                />
+                <Input
+                  name="profession"
+                  label="Profession"
+                  handleChange={handleChange}
+                  autoFocus
                 />
                 <Grid item xs={12} sm={12}>
                   <TextField
