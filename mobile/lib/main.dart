@@ -1,7 +1,25 @@
-import 'package:flutter/material.dart';
-import 'package:mobile/sign_in.dart';
+import 'dart:convert';
 
-void main() {
+import 'package:flutter/material.dart';
+import 'package:localstorage/localstorage.dart';
+import 'package:mobile/company/citizen_sign_up.dart';
+import 'package:mobile/home.dart';
+import 'package:mobile/routes/routes.dart';
+import 'package:mobile/services/shared_services.dart';
+import 'package:mobile/sign_in.dart';
+import 'package:mobile/citizen/citizen_sign_up.dart';
+
+Widget _defaultHome = const CitizenSignUpPage();
+
+void main() async {
+  WidgetsFlutterBinding.ensureInitialized();
+
+  bool _result = await SharedService.isLoggedIn();
+
+  if (_result) {
+    _defaultHome = const HomePage();
+  }
+
   runApp(const MyApp());
 }
 
@@ -10,58 +28,35 @@ class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
-      title: 'SLFBFE',
+      title: 'SLBFE',
+      debugShowCheckedModeBanner: false,
       theme: ThemeData(
         primarySwatch: Colors.blue,
       ),
-      home: const SignIn(),
+      initialRoute: '/',
+      routes: {
+        '/': (context) => _defaultHome,
+        loginRoute: (context) => const SignIn(),
+        citizenRegister: (context) => const CitizenSignUpPage(),
+        companyRegister: (context) => const CompanySignUpPage(),
+        homeRoute: (context) => const HomePage()
+      },
     );
   }
 }
 
-class MyHomePage extends StatefulWidget {
-  const MyHomePage({Key? key, required this.title}) : super(key: key);
+// class AuthenticationWrapper extends StatelessWidget {
+//   const AuthenticationWrapper({Key? key}) : super(key: key);
 
-  final String title;
+//   @override
+//   Widget build(BuildContext context) {
+//     final LocalStorage storage = LocalStorage('localstorage');
+//     final isLogged = json.decode(storage.getItem('profile'));
 
-  @override
-  State<MyHomePage> createState() => _MyHomePageState();
-}
+//     print(isLogged);
 
-class _MyHomePageState extends State<MyHomePage> {
-  int _counter = 0;
-
-  void _incrementCounter() {
-    setState(() {
-      _counter++;
-    });
-  }
-
-  @override
-  Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: AppBar(
-        title: Text(widget.title),
-      ),
-      body: Center(
-        child: Column(
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: <Widget>[
-            const Text(
-              'You have pushed the button this many times:',
-            ),
-            Text(
-              '$_counter',
-              style: Theme.of(context).textTheme.headline4,
-            ),
-          ],
-        ),
-      ),
-      floatingActionButton: FloatingActionButton(
-        onPressed: _incrementCounter,
-        tooltip: 'Increment',
-        child: const Icon(Icons.add),
-      ),
-    );
-  }
-}
+//     return const Scaffold(
+//       body: Center(child: Text('auth')),
+//     );
+//   }
+// }
