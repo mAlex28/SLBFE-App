@@ -1,8 +1,6 @@
-import 'dart:convert';
-
 import 'package:flutter/material.dart';
-import 'package:localstorage/localstorage.dart';
 import 'package:mobile/company/citizen_sign_up.dart';
+import 'package:mobile/company/company_home.dart';
 import 'package:mobile/home.dart';
 import 'package:mobile/routes/routes.dart';
 import 'package:mobile/services/shared_services.dart';
@@ -39,7 +37,8 @@ class MyApp extends StatelessWidget {
         loginRoute: (context) => const SignIn(),
         citizenRegister: (context) => const CitizenSignUpPage(),
         companyRegister: (context) => const CompanySignUpPage(),
-        homeRoute: (context) => const HomePage()
+        homeRoute: (context) => const HomePage(),
+        companyHomeRoute: (context) => const CompanyHomePage()
       },
     );
   }

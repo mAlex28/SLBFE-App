@@ -13,7 +13,7 @@ export const getAllComplains = async (req, res) => {
 export const makeComplains = async (req, res) => {
   const complain = req.body
 
-  const newComplains = new PostMessage({
+  const newComplains = new ComplainModel({
     ...complain,
     creator: req.userId,
     createdAt: new Date().toISOString(),
@@ -21,6 +21,7 @@ export const makeComplains = async (req, res) => {
 
   try {
     await newComplains.save()
+    res.status(201).json(newComplains)
   } catch (error) {
     res.status(500).json({ message: 'Something went wrong' })
   }

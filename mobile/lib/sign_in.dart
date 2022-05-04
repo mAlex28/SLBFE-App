@@ -26,51 +26,6 @@ class _SignInState extends State<SignIn> with SingleTickerProviderStateMixin {
   late TabController _tabController;
   final LocalStorage storage = LocalStorage('localstorage');
 
-  void _login(String email, String password) async {
-    try {
-      Response response = await post(
-          Uri.parse('http://192.168.1.29:5000/citizen/signin'),
-          body: {'email': email, 'password': password});
-
-      if (response.statusCode == 200) {
-        await SharedService.setLoginDetails(
-            citizenResponseLogin(response.body));
-      } else if (response.body == "User doesn't exist") {
-        Fluttertoast.showToast(
-            msg: "User doesn't exist",
-            toastLength: Toast.LENGTH_SHORT,
-            gravity: ToastGravity.BOTTOM,
-            timeInSecForIosWeb: 1,
-            backgroundColor: Colors.grey,
-            textColor: Colors.white,
-            fontSize: 14.0);
-      } else if (response.body == "Invalid credentials") {
-        Fluttertoast.showToast(
-            msg: 'Invalid credentials',
-            toastLength: Toast.LENGTH_SHORT,
-            gravity: ToastGravity.BOTTOM,
-            timeInSecForIosWeb: 1,
-            backgroundColor: Colors.grey,
-            textColor: Colors.white,
-            fontSize: 14.0);
-      } else {
-        Fluttertoast.showToast(
-            msg: 'Error signing in',
-            toastLength: Toast.LENGTH_SHORT,
-            gravity: ToastGravity.BOTTOM,
-            timeInSecForIosWeb: 1,
-            backgroundColor: Colors.grey,
-            textColor: Colors.white,
-            fontSize: 14.0);
-      }
-    } catch (e) {
-      throw Exception();
-    }
-    setState(() {
-      _loading = false;
-    });
-  }
-
   @override
   void initState() {
     _tabController = TabController(length: 2, vsync: this);

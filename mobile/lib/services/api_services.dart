@@ -30,7 +30,7 @@ class APIService {
       CitizenRequestRegister model) async {
     Map<String, String> requestHeaders = {'Content-Type': 'application/json'};
 
-    var url = Uri.http('http://192.168.1.29:5000', '/citizen/signup');
+    var url = Uri.http('192.168.1.29:5000', '/citizen/signup');
 
     var response = await client.post(url,
         headers: requestHeaders, body: jsonEncode(model.toJson()));
@@ -52,10 +52,49 @@ class APIService {
       headers: requestHeaders,
     );
 
-    if (response.statusCode != 404) {
+    if (response.statusCode == 200) {
       return response.body;
     } else {
       return "";
+    }
+  }
+
+  static Future makeComplains(email, complainTitle, complainText) async {
+    var loginDetails = await SharedService.loginDetails();
+    Map<String, String> requestHeaders = {
+      'Content-Type': 'application/json',
+      'Authorization': 'Bearer ${loginDetails!.token}'
+    };
+
+    final body = {
+      "email": email,
+      "complainTitle": complainTitle,
+      "complainText": complainText,
+    };
+
+    var url = Uri.http('192.168.1.29:5000', '/citizen/complains');
+    var response =
+        await client.post(url, headers: requestHeaders, body: jsonEncode(body));
+
+    if (response.statusCode == 201) {
+      Fluttertoast.showToast(
+          msg:
+              'Successfully submitted the complain. Our team will be in touch soon',
+          toastLength: Toast.LENGTH_LONG,
+          gravity: ToastGravity.BOTTOM,
+          timeInSecForIosWeb: 1,
+          backgroundColor: Colors.grey,
+          textColor: Colors.white,
+          fontSize: 14.0);
+    } else {
+      Fluttertoast.showToast(
+          msg: 'Error: Complaint node made.',
+          toastLength: Toast.LENGTH_SHORT,
+          gravity: ToastGravity.BOTTOM,
+          timeInSecForIosWeb: 1,
+          backgroundColor: Colors.grey,
+          textColor: Colors.white,
+          fontSize: 14.0);
     }
   }
 }
