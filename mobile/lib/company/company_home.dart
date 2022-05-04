@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:mobile/services/api_services.dart';
-import 'package:mobile/services/shared_services.dart';
+import 'package:mobile/custom/cutom_drawer.dart';
 
 class CompanyHomePage extends StatefulWidget {
   const CompanyHomePage({Key? key}) : super(key: key);
@@ -10,62 +9,13 @@ class CompanyHomePage extends StatefulWidget {
 }
 
 class _CompanyHomePageState extends State<CompanyHomePage> {
-  bool isVerified = false;
-
-//TODO: qualifications
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
         title: const Text('Companies'),
-        actions: [
-          IconButton(
-              onPressed: () => SharedService.logout(context),
-              icon: const Icon(Icons.logout))
-        ],
       ),
-      drawer: Drawer(
-          child: ListView(
-        padding: EdgeInsets.zero,
-        children: <Widget>[
-          const SizedBox(
-            height: 120.0,
-            child: DrawerHeader(
-              decoration: BoxDecoration(
-                color: Colors.blue,
-              ),
-              child: Text(
-                'SLBFE',
-                style: TextStyle(
-                  color: Colors.white,
-                  fontSize: 20,
-                ),
-              ),
-            ),
-          ),
-          ListTile(
-            leading: Icon(Icons.account_circle),
-            title: Text('Citizens'),
-            onTap: () {
-              Navigator.pop(context); // close the drawer
-            },
-          ),
-          ListTile(
-            leading: Icon(Icons.business_rounded),
-            title: Text('Companies'),
-            onTap: () {
-              Navigator.pop(context); // close the drawer
-            },
-          ),
-          ListTile(
-            leading: Icon(Icons.comment),
-            title: Text('Complain'),
-            onTap: () {
-              Navigator.pop(context); // close the drawer
-            },
-          ),
-        ],
-      )),
+      drawer: const CustomDrawer(),
       backgroundColor: const Color(0xfff1f2f6),
       body: Padding(
         padding: const EdgeInsets.only(top: 20.0, left: 8.0, right: 8.0),
@@ -81,8 +31,8 @@ class _CompanyHomePageState extends State<CompanyHomePage> {
         mainAxisSize: MainAxisSize.min,
         children: <Widget>[
           const ListTile(
-            title: Text('Alex Smith'),
-            subtitle: Text('Software engineer'),
+            title: Text('Dev-lopers'),
+            subtitle: Text('BakerStreet, uk'),
             trailing: Icon(
               Icons.verified,
               color: Colors.green,
@@ -96,6 +46,21 @@ class _CompanyHomePageState extends State<CompanyHomePage> {
               overflow: TextOverflow.ellipsis,
               softWrap: false,
             ),
+          ),
+          Row(
+            mainAxisAlignment: MainAxisAlignment.start,
+            children: const <Widget>[
+              Padding(
+                padding: EdgeInsets.all(10.0),
+                child: Text(
+                  'Software developement, IoT',
+                  style: TextStyle(color: Colors.grey),
+                  maxLines: 2,
+                  overflow: TextOverflow.ellipsis,
+                  softWrap: false,
+                ),
+              ),
+            ],
           ),
           Row(
             mainAxisAlignment: MainAxisAlignment.start,

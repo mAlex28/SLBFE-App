@@ -1,8 +1,11 @@
+import 'dart:convert';
+
 import 'package:flutter/material.dart';
-import 'package:http/http.dart';
+import 'package:fluttertoast/fluttertoast.dart';
+import 'package:http/http.dart' as http;
+import 'package:mobile/custom/cutom_drawer.dart';
 import 'package:mobile/routes/routes.dart';
-import 'package:mobile/services/api_services.dart';
-import 'package:mobile/services/shared_services.dart';
+import 'package:url_launcher/url_launcher.dart';
 
 class HomePage extends StatefulWidget {
   const HomePage({Key? key}) : super(key: key);
@@ -12,241 +15,243 @@ class HomePage extends StatefulWidget {
 }
 
 class _HomePageState extends State<HomePage> {
-  bool isVerified = false;
-//TODO: qualifications
+  final _baseUrl = 'http://192.168.1.29:5000/citizen';
 
-  final TextEditingController _emailController = TextEditingController();
-  final TextEditingController _complainTopicController =
-      TextEditingController();
-  final TextEditingController _complainDespController = TextEditingController();
+  int _page = 1;
+  bool _hasNextPage = true;
+  bool _isFirstLoadRunning = false;
+  bool _isLoadMoreRunning = false;
+  List _citizens = [];
 
-  // Future _complain(email, complainTitle, complainText) async {
-  //   Response response = await post(
-  //       Uri.parse('http://192.168.1.29:5000/citizen/complains'),
-  //       body: {
-  //         "email": email,
-  //         "complainTitle": complainTitle,
-  //         "complainText": complainText,
-  //       });
+  void _firstLoad() async {
+    setState(() {
+      _isFirstLoadRunning = true;
+    });
+    try {
+      final res = await http.get(Uri.parse("$_baseUrl?page=$_page"));
+      setState(() {
+        var bodyData = json.decode(res.body);
+        _citizens = bodyData['data'];
+      });
+    } catch (err) {
+      print('Something went wrong');
+    }
 
-  //   if (response.statusCode == 201) {
-  //     print('success');
-  //   } else {
-  //     print(response.statusCode);
-  //   }
-  // }
+    setState(() {
+      _isFirstLoadRunning = false;
+    });
+  }
 
-  Future _complainDialog() => showDialog(
-      context: context,
-      builder: (context) => AlertDialog(
-            title: const Text(
-              'Add a complain',
-              textAlign: TextAlign.center,
-            ),
-            content: SizedBox(
-              height: 300,
-              child: SingleChildScrollView(
-                child: Column(
-                  children: [
-                    TextField(
-                        autofocus: true,
-                        keyboardType: TextInputType.emailAddress,
-                        controller: _emailController,
-                        decoration: const InputDecoration(
-                            enabledBorder: OutlineInputBorder(
-                                borderRadius:
-                                    BorderRadius.all(Radius.circular(4.0))),
-                            hintText: 'Email address')),
-                    const SizedBox(
-                      height: 10,
-                    ),
-                    TextField(
-                        controller: _complainTopicController,
-                        autofocus: true,
-                        decoration: const InputDecoration(
-                            enabledBorder: OutlineInputBorder(
-                                borderRadius:
-                                    BorderRadius.all(Radius.circular(4.0))),
-                            hintText: 'What are you complaining?')),
-                    const SizedBox(
-                      height: 10,
-                    ),
-                    TextField(
-                        controller: _complainDespController,
-                        keyboardType: TextInputType.multiline,
-                        maxLines: 5,
-                        maxLength: 1000,
-                        autofocus: true,
-                        decoration: const InputDecoration(
-                            enabledBorder: OutlineInputBorder(
-                                borderRadius:
-                                    BorderRadius.all(Radius.circular(4.0))),
-                            hintText: 'Describe your complain')),
-                  ],
-                ),
-              ),
-            ),
-            actions: [
-              TextButton(
-                  onPressed: () => Navigator.of(context).pop(),
-                  child: const Text('Cancel')),
-              TextButton(
-                  onPressed: () async {
-                    APIService.makeComplains(
-                            _emailController.text.trim(),
-                            _complainTopicController.text.trim(),
-                            _complainDespController.text.trim())
-                        .then((value) => Navigator.of(context).pop());
+  // This function will be triggered whenver the user scroll
+  // to near the bottom of the list view
+  void _loadMore() async {
+    if (_hasNextPage == true &&
+        _isFirstLoadRunning == false &&
+        _isLoadMoreRunning == false &&
+        _controller.position.extentAfter < 300) {
+      setState(() {
+        _isLoadMoreRunning = true;
+      });
+      _page += 1;
+      try {
+        final res = await http.get(Uri.parse("$_baseUrl?_page=$_page"));
 
-                    _emailController.clear();
-                    _complainTopicController.clear();
-                    _complainDespController.clear();
-                  },
-                  child: const Text('Submit')),
-            ],
-          ));
+        final List fetchedCitizens = json.decode(res.body);
+        if (fetchedCitizens.isNotEmpty) {
+          setState(() {
+            _citizens.addAll(fetchedCitizens);
+          });
+        } else {
+          setState(() {
+            _hasNextPage = false;
+          });
+        }
+      } catch (err) {
+        print('load Something went wrong!');
+      }
+
+      setState(() {
+        _isLoadMoreRunning = false;
+      });
+    }
+  }
+
+  void _launchEmail(url) async {
+    var newUrl = Uri.parse(url);
+    if (await canLaunchUrl(newUrl)) {
+      await launchUrl(newUrl);
+    } else {
+      throw 'Could not launch $url';
+    }
+  }
+
+  void _launchPhoneCall(url) async {
+    var newUrl = Uri.parse(url);
+
+    if (await canLaunchUrl(newUrl)) {
+      await launchUrl(newUrl);
+    } else {
+      throw 'Could not launch $url';
+    }
+  }
+
+  // The controller for the ListView
+  late ScrollController _controller;
+
+  @override
+  void initState() {
+    _firstLoad();
+    _controller = ScrollController()..addListener(_loadMore);
+    super.initState();
+  }
+
+  @override
+  void dispose() {
+    _controller.removeListener(_loadMore);
+    super.dispose();
+  }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: const Text('Home'),
-        actions: [
-          IconButton(
-              onPressed: () => SharedService.logout(context),
-              icon: const Icon(Icons.logout))
-        ],
+        title: const Text('Citizens'),
       ),
-      drawer: Drawer(
-          child: ListView(
-        padding: EdgeInsets.zero,
-        children: <Widget>[
-          const SizedBox(
-            height: 120.0,
-            child: DrawerHeader(
-              decoration: BoxDecoration(
-                color: Colors.blue,
-              ),
-              child: Text(
-                'SLBFE',
-                style: TextStyle(
-                  color: Colors.white,
-                  fontSize: 20,
-                ),
-              ),
-            ),
-          ),
-          ListTile(
-            leading: const Icon(Icons.account_circle),
-            title: const Text('Citizens'),
-            onTap: () {
-              Navigator.pushNamedAndRemoveUntil(
-                  context, homeRoute, (route) => false);
-            },
-          ),
-          ListTile(
-            leading: const Icon(Icons.business_rounded),
-            title: const Text('Companies'),
-            onTap: () {
-              Navigator.pushNamedAndRemoveUntil(
-                  context, companyHomeRoute, (route) => false);
-            },
-          ),
-          ListTile(
-            leading: const Icon(Icons.comment),
-            title: const Text('Complain'),
-            onTap: () async {
-              await _complainDialog();
-            },
-          ),
-          ListTile(
-            leading: const Icon(Icons.account_circle_rounded),
-            title: const Text('Profile'),
-            onTap: () {
-              Navigator.pop(context); // close the drawer
-            },
-          ),
-          ListTile(
-            leading: const Icon(Icons.logout_rounded),
-            title: const Text('Logout'),
-            onTap: () => SharedService.logout(context),
-          ),
-        ],
-      )),
+      drawer: const CustomDrawer(),
       backgroundColor: const Color(0xfff1f2f6),
-      body: Padding(
-        padding: const EdgeInsets.only(top: 20.0, left: 8.0, right: 8.0),
-        child: users(),
-      ),
-    );
-  }
+      body: _isFirstLoadRunning
+          ? const Center(
+              child: CircularProgressIndicator(),
+            )
+          : Column(
+              children: [
+                Expanded(
+                  child: ListView.builder(
+                    controller: _controller,
+                    itemCount: _citizens.length,
+                    itemBuilder: (_, index) => Padding(
+                      padding: const EdgeInsets.only(
+                          top: 8.0, left: 8.0, right: 8.0),
+                      child: GestureDetector(
+                        onTap: () =>
+                            Navigator.pushNamed(context, citizenProfileRoute),
+                        child: Card(
+                          elevation: 4,
+                          child: Column(
+                            mainAxisSize: MainAxisSize.min,
+                            children: <Widget>[
+                              ListTile(
+                                title: Text(_citizens[index]['name']),
+                                subtitle: Text(_citizens[index]['profession']),
+                                trailing: _citizens[index]['isVerified']
+                                    ? const Icon(
+                                        Icons.verified,
+                                        color: Colors.green,
+                                        semanticLabel: 'Verified',
+                                      )
+                                    : const Icon(
+                                        Icons.cancel,
+                                        color: Colors.red,
+                                        semanticLabel: 'Not Verified',
+                                      ),
+                              ),
+                              Padding(
+                                padding: const EdgeInsets.all(10.0),
+                                child: Text(
+                                  _citizens[index]['description'],
+                                  maxLines: 4,
+                                  overflow: TextOverflow.ellipsis,
+                                  softWrap: false,
+                                ),
+                              ),
+                              Padding(
+                                  padding: const EdgeInsets.all(10.0),
+                                  child: Row(
+                                      mainAxisAlignment:
+                                          MainAxisAlignment.start,
+                                      children: List.from(
+                                        _citizens[index]['qualifications'].map(
+                                          (value) => Text(
+                                            '$value,',
+                                            style: const TextStyle(
+                                                color: Colors.grey),
+                                            maxLines: 2,
+                                            overflow: TextOverflow.ellipsis,
+                                            softWrap: false,
+                                          ),
+                                        ),
+                                      ))),
+                              Row(
+                                mainAxisAlignment: MainAxisAlignment.start,
+                                children: <Widget>[
+                                  IconButton(
+                                    icon: const Icon(Icons.call),
+                                    onPressed: () {
+                                      try {
+                                        _launchPhoneCall(
+                                            'tel:${_citizens[index]['contact']}');
+                                      } catch (e) {
+                                        Fluttertoast.showToast(
+                                            msg: 'Could not launch phone',
+                                            toastLength: Toast.LENGTH_SHORT,
+                                            gravity: ToastGravity.BOTTOM,
+                                            timeInSecForIosWeb: 1,
+                                            backgroundColor: Colors.grey,
+                                            textColor: Colors.white,
+                                            fontSize: 14.0);
+                                      }
+                                    },
+                                  ),
+                                  const SizedBox(width: 8),
+                                  IconButton(
+                                    icon: const Icon(Icons.email),
+                                    onPressed: () {
+                                      try {
+                                        _launchEmail(
+                                            'mailto:${_citizens[index]['email']}');
+                                      } catch (e) {
+                                        Fluttertoast.showToast(
+                                            msg: 'Could not launch email',
+                                            toastLength: Toast.LENGTH_SHORT,
+                                            gravity: ToastGravity.BOTTOM,
+                                            timeInSecForIosWeb: 1,
+                                            backgroundColor: Colors.grey,
+                                            textColor: Colors.white,
+                                            fontSize: 14.0);
+                                      }
+                                    },
+                                  ),
+                                  const SizedBox(width: 8),
+                                ],
+                              ),
+                            ],
+                          ),
+                        ),
+                      ),
+                    ),
+                  ),
+                ),
 
-  Widget users() {
-    return Card(
-      elevation: 4,
-      child: Column(
-        mainAxisSize: MainAxisSize.min,
-        children: <Widget>[
-          const ListTile(
-            title: Text('Alex Smith'),
-            subtitle: Text('Software engineer'),
-            trailing: Icon(
-              Icons.verified,
-              color: Colors.green,
+                // when the _loadMore function is running
+                if (_isLoadMoreRunning == true)
+                  const Padding(
+                    padding: EdgeInsets.only(top: 10, bottom: 40),
+                    child: Center(
+                      child: CircularProgressIndicator(),
+                    ),
+                  ),
+
+                // When nothing else to load
+                if (_hasNextPage == false)
+                  Container(
+                    padding: const EdgeInsets.only(top: 30, bottom: 40),
+                    color: Colors.amber,
+                    child: const Center(
+                      child: Text('All citizens are fetched'),
+                    ),
+                  ),
+              ],
             ),
-          ),
-          const Padding(
-            padding: EdgeInsets.all(10.0),
-            child: Text(
-              'Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.',
-              maxLines: 4,
-              overflow: TextOverflow.ellipsis,
-              softWrap: false,
-            ),
-          ),
-          Row(
-            mainAxisAlignment: MainAxisAlignment.start,
-            children: <Widget>[
-              IconButton(
-                icon: const Icon(Icons.call),
-                onPressed: () {},
-              ),
-              const SizedBox(width: 8),
-              IconButton(
-                icon: const Icon(Icons.email),
-                onPressed: () {},
-              ),
-              const SizedBox(width: 8),
-            ],
-          ),
-        ],
-      ),
     );
-    //   return FutureBuilder(
-    //     builder: (context, AsyncSnapshot<String> model) {
-    //       print(model.hasError);
-    //       if (model.hasData) {
-    //         // print(model.data);
-    //         return Center(
-    //           child: Text(model.data!),
-    //         );
-    //       } else {
-    //         return Center(
-    //           child: Text("Cannot get data"),
-    //         );
-    //       }
-
-    //       // switch (model.connectionState) {
-    //       //   case ConnectionState.waiting:
-    //       //   case ConnectionState.active:
-
-    //       //   default:
-    //       //     return const Center(
-    //       //       child: CircularProgressIndicator(),
-    //       //     );
-    //       // }
-    //     },
-    //     future: APIService.getUsersProfile(),
-    //   );
   }
 }

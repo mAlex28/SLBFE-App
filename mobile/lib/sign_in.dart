@@ -1,13 +1,8 @@
-import 'dart:convert';
-
 import 'package:flutter/material.dart';
 import 'package:fluttertoast/fluttertoast.dart';
-import 'package:http/http.dart';
-import 'package:localstorage/localstorage.dart';
 import 'package:mobile/models/citizen_login_model.dart';
 import 'package:mobile/routes/routes.dart';
 import 'package:mobile/services/api_services.dart';
-import 'package:mobile/services/shared_services.dart';
 import 'package:modal_progress_hud_nsn/modal_progress_hud_nsn.dart';
 
 class SignIn extends StatefulWidget {
@@ -24,7 +19,6 @@ class _SignInState extends State<SignIn> with SingleTickerProviderStateMixin {
   final TextEditingController _emailController = TextEditingController();
   final TextEditingController _passwordController = TextEditingController();
   late TabController _tabController;
-  final LocalStorage storage = LocalStorage('localstorage');
 
   @override
   void initState() {
@@ -176,9 +170,6 @@ class _SignInState extends State<SignIn> with SingleTickerProviderStateMixin {
                                       fontSize: 14.0);
                                 }
                               });
-                              // _login(_emailController.text.trim(),
-                              //     _passwordController.text.trim());
-
                             } catch (e) {
                               Fluttertoast.showToast(
                                   msg: 'Error signing in',

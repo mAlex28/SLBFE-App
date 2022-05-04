@@ -10,6 +10,7 @@ import 'package:mobile/services/shared_services.dart';
 class APIService {
   static var client = http.Client();
 
+  /// Sign in the citizen with a JWT token
   static Future<bool> citizenLogin(CitizenRequestLogin model) async {
     Map<String, String> requestHeaders = {'Content-Type': 'application/json'};
 
@@ -26,6 +27,7 @@ class APIService {
     }
   }
 
+  /// Create a new citizen
   static Future<CitizenResponseRegister> citizenRegister(
       CitizenRequestRegister model) async {
     Map<String, String> requestHeaders = {'Content-Type': 'application/json'};
@@ -38,27 +40,7 @@ class APIService {
     return citizenResponseRegister(response.body);
   }
 
-  static Future<String> getUsersProfile() async {
-    var loginDetails = await SharedService.loginDetails();
-    Map<String, String> requestHeaders = {
-      'Content-Type': 'application/json',
-    };
-    // 'Authorization': 'Basic ${loginDetails!.token}'
-
-    var url = Uri.http('192.168.1.29:5000', '/citizen', {'page': "1"});
-
-    var response = await client.get(
-      url,
-      headers: requestHeaders,
-    );
-
-    if (response.statusCode == 200) {
-      return response.body;
-    } else {
-      return "";
-    }
-  }
-
+  /// Make a complain to the officers
   static Future makeComplains(email, complainTitle, complainText) async {
     var loginDetails = await SharedService.loginDetails();
     Map<String, String> requestHeaders = {
