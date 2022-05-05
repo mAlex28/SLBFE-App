@@ -387,6 +387,7 @@ class _CitizenSignUpPageState extends State<CitizenSignUpPage> {
               controller: _descriptionController,
               minLines: 5,
               maxLines: null,
+              maxLength: 1000,
               decoration: InputDecoration(
                 hintText: "Add a description",
                 border: OutlineInputBorder(

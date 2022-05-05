@@ -3,8 +3,8 @@ import 'dart:convert';
 import 'package:flutter/material.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:http/http.dart' as http;
+import 'package:mobile/citizen/citizen_profile.dart';
 import 'package:mobile/custom/cutom_drawer.dart';
-import 'package:mobile/routes/routes.dart';
 import 'package:url_launcher/url_launcher.dart';
 
 class HomePage extends StatefulWidget {
@@ -133,8 +133,14 @@ class _HomePageState extends State<HomePage> {
                       padding: const EdgeInsets.only(
                           top: 8.0, left: 8.0, right: 8.0),
                       child: GestureDetector(
-                        onTap: () =>
-                            Navigator.pushNamed(context, citizenProfileRoute),
+                        onTap: () {
+                          Navigator.push(
+                              context,
+                              MaterialPageRoute(
+                                  builder: (context) => CitizenProfilePage(
+                                        citizen: _citizens[index],
+                                      )));
+                        },
                         child: Card(
                           elevation: 4,
                           child: Column(

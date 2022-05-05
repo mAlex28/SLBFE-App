@@ -1,7 +1,9 @@
 import 'package:flutter/material.dart';
 
 class CompanyProfilePage extends StatefulWidget {
-  const CompanyProfilePage({Key? key}) : super(key: key);
+  final dynamic citizen;
+
+  const CompanyProfilePage({Key? key, this.citizen}) : super(key: key);
 
   @override
   State<CompanyProfilePage> createState() => _CompanyProfilePageState();
