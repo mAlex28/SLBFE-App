@@ -1,3 +1,8 @@
+import 'dart:convert';
+
+import 'package:cached_memory_image/cached_image_base64_manager.dart';
+import 'package:cached_memory_image/cached_image_manager.dart';
+import 'package:cached_memory_image/provider/cached_memory_image_provider.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:fluttertoast/fluttertoast.dart';
@@ -12,6 +17,9 @@ class CitizenProfilePage extends StatefulWidget {
 }
 
 class _CitizenProfilePageState extends State<CitizenProfilePage> {
+  final CachedImageManager _cachedImageManager =
+      CachedImageBase64Manager.instance();
+
   final String _imagePath = 'assets/images/logo.png';
   final _baseUrl = 'http://192.168.1.29:5000/citizen';
 
@@ -205,6 +213,9 @@ class _CitizenProfilePageState extends State<CitizenProfilePage> {
                     label: const Text('Send mail')),
                 TextButton.icon(
                     onPressed: () {
+                      var decoded = base64.decode(widget.citizen['profilePic']);
+                      print(utf8.decode(decoded));
+
                       String addressToCopy =
                           '${widget.citizen['address']}, ${widget.citizen['city']}, ${widget.citizen['province']} province, Sri Lanka (${widget.citizen['postalCode']})';
 

@@ -109,7 +109,7 @@ class CitizenResponseRegister {
   late final String token;
 
   CitizenResponseRegister.fromJson(Map<String, dynamic> json) {
-    result = json['data'] != null ? Result.fromJson(json['result']) : null;
+    result = json['result'] != null ? Result.fromJson(json['result']) : null;
     token = json['token'];
   }
 

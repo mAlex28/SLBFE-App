@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:mobile/citizen/citizen_profile.dart';
-import 'package:mobile/company/citizen_sign_up.dart';
+import 'package:mobile/company/company_sign_up.dart';
 import 'package:mobile/company/company_home.dart';
 import 'package:mobile/company/company_profile.dart';
 import 'package:mobile/home.dart';

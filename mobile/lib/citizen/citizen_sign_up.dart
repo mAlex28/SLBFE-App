@@ -452,7 +452,7 @@ class _CitizenSignUpPageState extends State<CitizenSignUpPage> {
                 if (value == null || value.trim().isEmpty) {
                   return "This field is required";
                 } else if (value.trim().length < minLength) {
-                  return "Password should have minimum 6 characters";
+                  return "Password should have minimum 5 characters";
                 } else {
                   return null;
                 }
@@ -477,11 +477,8 @@ class _CitizenSignUpPageState extends State<CitizenSignUpPage> {
             ),
             TextFormField(
               validator: (value) {
-                var minLength = 6;
                 if (value == null || value.trim().isEmpty) {
                   return "This field is required";
-                } else if (value.trim().length > minLength) {
-                  return "Password should have minimum 6 characters";
                 } else if (value.toString().trim() !=
                     _passwordController.text.trim()) {
                   return "Passwords does not match";

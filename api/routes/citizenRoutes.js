@@ -9,6 +9,7 @@ import {
   getCitizenByNameSearch,
   getCitizenBySearch,
   getCitizenByNICSearch,
+  getCitizensWithoutPagination,
 } from "../controllers/citizenController.js"
 import {
   getAllComplains,
@@ -21,6 +22,8 @@ const router = expres.Router()
 
 // http:localhost:5000/citizen
 router.get("/", getAllCitizens)
+router.get("/wpageination", getCitizensWithoutPagination)
+
 router.get("/:id", getCitizen)
 router.get("/citizenname", getCitizenByNameSearch)
 router.get("/search", getCitizenBySearch)

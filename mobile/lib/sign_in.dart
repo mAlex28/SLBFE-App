@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:mobile/models/citizen_login_model.dart';
+import 'package:mobile/models/company_login_model.dart';
 import 'package:mobile/routes/routes.dart';
 import 'package:mobile/services/api_services.dart';
 import 'package:modal_progress_hud_nsn/modal_progress_hud_nsn.dart';
@@ -251,28 +252,48 @@ class _SignInState extends State<SignIn> with SingleTickerProviderStateMixin {
                       ),
                       GestureDetector(
                         onTap: () {
-                          // if (_formKey.currentState!.validate()) {
-                          //   _formKey.currentState!.save();
+                          if (_formKey.currentState!.validate()) {
+                            _formKey.currentState!.save();
 
-                          //   try {
-                          //     _login(_emailController.text.trim(),
-                          //         _passwordController.text.trim());
+                            try {
+                              setState(() {
+                                _loading = true;
+                              });
+                              CompanyLoginRequest model = CompanyLoginRequest(
+                                  email: _emailController.text.trim(),
+                                  password: _passwordController.text.trim());
 
-                          //     Navigator.of(context).pushNamedAndRemoveUntil(
-                          //       homeRoute,
-                          //       (route) => false,
-                          //     );
-                          //   } catch (e) {
-                          //     Fluttertoast.showToast(
-                          //         msg: 'Error signing in',
-                          //         toastLength: Toast.LENGTH_SHORT,
-                          //         gravity: ToastGravity.BOTTOM,
-                          //         timeInSecForIosWeb: 1,
-                          //         backgroundColor: Colors.grey,
-                          //         textColor: Colors.white,
-                          //         fontSize: 14.0);
-                          //   }
-                          // }
+                              APIService.companyLogin(model).then((response) {
+                                setState(() {
+                                  _loading = false;
+                                });
+                                if (response) {
+                                  Navigator.of(context).pushNamedAndRemoveUntil(
+                                    homeRoute,
+                                    (route) => false,
+                                  );
+                                } else {
+                                  Fluttertoast.showToast(
+                                      msg: 'Invalid username / password',
+                                      toastLength: Toast.LENGTH_SHORT,
+                                      gravity: ToastGravity.BOTTOM,
+                                      timeInSecForIosWeb: 1,
+                                      backgroundColor: Colors.grey,
+                                      textColor: Colors.white,
+                                      fontSize: 14.0);
+                                }
+                              });
+                            } catch (e) {
+                              Fluttertoast.showToast(
+                                  msg: 'Error signing in',
+                                  toastLength: Toast.LENGTH_SHORT,
+                                  gravity: ToastGravity.BOTTOM,
+                                  timeInSecForIosWeb: 1,
+                                  backgroundColor: Colors.grey,
+                                  textColor: Colors.white,
+                                  fontSize: 14.0);
+                            }
+                          }
                         },
                         child: Container(
                           height: 40,

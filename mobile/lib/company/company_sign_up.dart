@@ -1,7 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:mobile/custom/multiselection_form_field.dart';
+import 'package:mobile/models/company_register_model.dart';
 import 'package:mobile/routes/routes.dart';
+import 'package:mobile/services/api_services.dart';
 import 'package:modal_progress_hud_nsn/modal_progress_hud_nsn.dart';
 
 class CompanySignUpPage extends StatefulWidget {
@@ -177,6 +179,7 @@ class _CompanySignUpPageState extends State<CompanySignUpPage> {
               controller: _descriptionController,
               minLines: 5,
               maxLines: null,
+              maxLength: 1000,
               decoration: InputDecoration(
                 hintText: "Add a description",
                 border: OutlineInputBorder(
@@ -241,7 +244,7 @@ class _CompanySignUpPageState extends State<CompanySignUpPage> {
                 if (value == null || value.trim().isEmpty) {
                   return "This field is required";
                 } else if (value.trim().length < minLength) {
-                  return "Password should have minimum 6 characters";
+                  return "Password should have minimum 5 characters";
                 } else {
                   return null;
                 }
@@ -269,8 +272,6 @@ class _CompanySignUpPageState extends State<CompanySignUpPage> {
                 var minLength = 6;
                 if (value == null || value.trim().isEmpty) {
                   return "This field is required";
-                } else if (value.trim().length > minLength) {
-                  return "Password should have minimum 6 characters";
                 } else if (value.toString().trim() !=
                     _passwordController.text.trim()) {
                   return "Passwords does not match";
@@ -306,51 +307,40 @@ class _CompanySignUpPageState extends State<CompanySignUpPage> {
                       _loading = true;
                     });
 
-                    // CitizenRequestRegister model = CitizenRequestRegister(
-                    //     nic: _nicController.text.trim(),
-                    //     profilePic: "",
-                    //     firstName: _firstNameController.text.trim(),
-                    //     lastName: _lastNameController.text.trim(),
-                    //     age: _ageController.text.trim(),
-                    //     description: _descriptionController.text.trim(),
-                    //     contact: _contactController.text.trim(),
-                    //     address: _addressController.text.trim(),
-                    //     postalCode: _postalcodeController.text.trim(),
-                    //     city: _cityController.text.trim(),
-                    //     province: _provinceController.text.trim(),
-                    //     latitude: position.latitude.toString(),
-                    //     longitude: position.longitude.toString(),
-                    //     profession: _professionController.text.trim(),
-                    //     email: _emailController.text.trim(),
-                    //     qualifications: _qualifications,
-                    //     password: _passwordController.text.trim(),
-                    //     birthCertificate: "",
-                    //     cv: "",
-                    //     passport: "",
-                    //     confirmPassword:
-                    //         _confirmPasswordController.text.trim());
+                    CompanyRegisterRequest model = CompanyRegisterRequest(
+                        companyName: _companyNameController.text.trim(),
+                        description: _descriptionController.text.trim(),
+                        contact: _contactController.text.trim(),
+                        address: _addressController.text.trim(),
+                        city: _cityController.text.trim(),
+                        province: _provinceController.text.trim(),
+                        country: _countryController.text.trim(),
+                        email: _emailController.text.trim(),
+                        companyFields: _fields,
+                        password: _passwordController.text.trim(),
+                        confirmPassword:
+                            _confirmPasswordController.text.trim());
 
-                    // APIService.citizenRegister(model).then((response) {
-                    //   setState(() {
-                    //     _loading = false;
-                    //   });
-                    //   if (response.result != null) {
-                    //     Navigator.of(context).pushNamedAndRemoveUntil(
-                    //       homeRoute,
-                    //       (route) => false,
-                    //     );
-                    //   } else {
-                    //     Fluttertoast.showToast(
-                    //         msg: 'Incomplete form',
-                    //         toastLength: Toast.LENGTH_SHORT,
-                    //         gravity: ToastGravity.BOTTOM,
-                    //         timeInSecForIosWeb: 1,
-                    //         backgroundColor: Colors.grey,
-                    //         textColor: Colors.white,
-                    //         fontSize: 14.0);
-                    //   }
-                    // });
-
+                    APIService.companyRegister(model).then((response) {
+                      setState(() {
+                        _loading = false;
+                      });
+                      if (response.result != null) {
+                        Navigator.of(context).pushNamedAndRemoveUntil(
+                          homeRoute,
+                          (route) => false,
+                        );
+                      } else {
+                        Fluttertoast.showToast(
+                            msg: 'Incomplete form',
+                            toastLength: Toast.LENGTH_SHORT,
+                            gravity: ToastGravity.BOTTOM,
+                            timeInSecForIosWeb: 1,
+                            backgroundColor: Colors.grey,
+                            textColor: Colors.white,
+                            fontSize: 14.0);
+                      }
+                    });
                   } catch (e) {
                     Fluttertoast.showToast(
                         msg: 'Error signing up',

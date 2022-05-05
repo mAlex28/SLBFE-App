@@ -5,6 +5,8 @@ import 'package:fluttertoast/fluttertoast.dart';
 import 'package:http/http.dart' as http;
 import 'package:mobile/models/citizen_login_model.dart';
 import 'package:mobile/models/citizen_register_model.dart';
+import 'package:mobile/models/company_login_model.dart';
+import 'package:mobile/models/company_register_model.dart';
 import 'package:mobile/services/shared_services.dart';
 
 class APIService {
@@ -27,6 +29,24 @@ class APIService {
     }
   }
 
+  /// Sign in the citizen with a JWT token
+  static Future<bool> companyLogin(CompanyLoginRequest model) async {
+    Map<String, String> requestHeaders = {'Content-Type': 'application/json'};
+
+    var url = Uri.http('192.168.1.29:5000', '/company/signin');
+
+    var response = await client.post(url,
+        headers: requestHeaders, body: jsonEncode(model.toJson()));
+
+    if (response.statusCode == 200) {
+      await CompanySharedService.setLoginDetails(
+          companyLoginResponse(response.body));
+      return true;
+    } else {
+      return false;
+    }
+  }
+
   /// Create a new citizen
   static Future<CitizenResponseRegister> citizenRegister(
       CitizenRequestRegister model) async {
@@ -38,6 +58,19 @@ class APIService {
         headers: requestHeaders, body: jsonEncode(model.toJson()));
 
     return citizenResponseRegister(response.body);
+  }
+
+  /// Create a new company
+  static Future<CompanyRegisterResponse> companyRegister(
+      CompanyRegisterRequest model) async {
+    Map<String, String> requestHeaders = {'Content-Type': 'application/json'};
+
+    var url = Uri.http('192.168.1.29:5000', '/company/signup');
+
+    var response = await client.post(url,
+        headers: requestHeaders, body: jsonEncode(model.toJson()));
+
+    return companyRegisterResponse(response.body);
   }
 
   /// Make a complain to the officers

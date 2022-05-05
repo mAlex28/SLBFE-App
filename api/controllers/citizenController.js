@@ -1,9 +1,9 @@
-import mongoose from 'mongoose'
-import express from 'express'
-import bcrypt from 'bcryptjs'
-import jwt from 'jsonwebtoken'
+import mongoose from "mongoose"
+import express from "express"
+import bcrypt from "bcryptjs"
+import jwt from "jsonwebtoken"
 
-import CitizenModel from '../models/citizen.js'
+import CitizenModel from "../models/citizen.js"
 
 const router = express.Router()
 export const signin = async (req, res) => {
@@ -19,12 +19,12 @@ export const signin = async (req, res) => {
       existingUser.password
     )
     if (!isPasswordCorrect)
-      return res.status(404).json({ message: 'Invalid credentials' })
+      return res.status(404).json({ message: "Invalid credentials" })
 
     const token = jwt.sign(
       { email: existingUser.email, id: existingUser._id },
-      'test',
-      { expiresIn: '5h' }
+      "test",
+      { expiresIn: "5h" }
     )
 
     res.status(200).json({
@@ -32,7 +32,7 @@ export const signin = async (req, res) => {
       token,
     })
   } catch (error) {
-    res.status(500).json({ message: 'Something went wrong' })
+    res.status(500).json({ message: "Something went wrong" })
   }
 }
 
@@ -64,7 +64,7 @@ export const signup = async (req, res) => {
   try {
     const existingUser = await CitizenModel.findOne({ email })
     if (existingUser)
-      return res.status(404).json({ message: 'User already exist' })
+      return res.status(404).json({ message: "User already exist" })
 
     if (password !== confirmPassword)
       return res.status(404).json({ message: "Passwords don't match" })
@@ -94,8 +94,8 @@ export const signup = async (req, res) => {
       passport,
     })
 
-    const token = jwt.sign({ email: result.email, id: result._id }, 'test', {
-      expiresIn: '5h',
+    const token = jwt.sign({ email: result.email, id: result._id }, "test", {
+      expiresIn: "5h",
     })
 
     res.status(200).json({
@@ -103,7 +103,7 @@ export const signup = async (req, res) => {
       token,
     })
   } catch (error) {
-    res.status(500).json({ message: 'Something went wrong' })
+    res.status(500).json({ message: "Something went wrong" })
   }
 }
 
@@ -131,11 +131,21 @@ export const getAllCitizens = async (req, res) => {
   }
 }
 
+export const getCitizensWithoutPagination = async (req, res) => {
+  try {
+    const citizens = await CitizenModel.find({})
+
+    res.json(citizens)
+  } catch (error) {
+    res.status(404).json({ message: error.message })
+  }
+}
+
 export const getCitizen = async (req, res) => {
   const { id } = req.params
 
   if (!mongoose.Types.ObjectId.isValid(id))
-    return res.status(404).send('No citizen found')
+    return res.status(404).send("No citizen found")
   try {
     const citizen = await CitizenModel.findById(id)
     res.status(200).json(citizen)
@@ -150,7 +160,7 @@ export const updateCitizen = async (req, res) => {
 
   // to make sure the id is valid
   if (!mongoose.Types.ObjectId.isValid(_id))
-    return res.status(404).send('No citizen found')
+    return res.status(404).send("No citizen found")
 
   const updatedCitizen = await CitizenModel.findByIdAndUpdate(
     _id,
@@ -167,7 +177,7 @@ export const deleteCitizen = async (req, res) => {
 
   // to make sure the id is valid
   if (!mongoose.Types.ObjectId.isValid(id))
-    return res.status(404).send('No citizen found')
+    return res.status(404).send("No citizen found")
 
   await CitizenModel.findByIdAndRemove(id)
 }
@@ -200,15 +210,15 @@ export const getCitizenBySearch = async (req, res) => {
   const { searchQuery, qualifications } = req.query
 
   try {
-    const name = new RegExp(searchQuery, 'i')
-    // TOOD: add nic search
+    const name = new RegExp(searchQuery, "i")
 
     const citizens = await CitizenModel.find({
-      $or: [{ name }, { qualifications: { $in: qualifications.split(',') } }],
+      $or: [{ name }, { qualifications: { $in: qualifications.split(",") } }],
     })
 
     res.json({ data: citizens })
   } catch (error) {
+    console.log(error)
     res.status(404).json({ message: error.message })
   }
 }
