@@ -6,8 +6,8 @@ import {
   getAllCitizens,
   updateCitizen,
   deleteCitizen,
+  getCitizensBySearch,
   getCitizenByNameSearch,
-  getCitizenBySearch,
   getCitizenByNICSearch,
   getCitizensWithoutPagination,
 } from "../controllers/citizenController.js"
@@ -22,10 +22,10 @@ const router = expres.Router()
 
 // http://localhost:5000/citizen
 router.get("/", getAllCitizens)
+router.get("/search", getCitizensBySearch)
 router.get("/all", getCitizensWithoutPagination)
 router.get("/:id", getCitizen)
 router.get("/citizenname", getCitizenByNameSearch)
-router.get("/search", getCitizenBySearch)
 router.get("/nic", getCitizenByNICSearch)
 
 router.post("/signin", signin)

@@ -382,6 +382,7 @@ class _CitizenSignUpPageState extends State<CitizenSignUpPage> {
               height: 20,
             ),
             TextFormField(
+              autofocus: true,
               keyboardType: TextInputType.multiline,
               validator: (value) => validate(value),
               controller: _descriptionController,
@@ -509,14 +510,20 @@ class _CitizenSignUpPageState extends State<CitizenSignUpPage> {
                       await FilePicker.platform.pickFiles(type: FileType.image);
                   if (result == null) return;
 
-                  PlatformFile file = result.files.first;
-                  profilePicture = file;
-                  print(file.bytes);
-                  print(file.name);
+                  if (result.files.isNotEmpty) {
+                    final fileBytes = result.files.first.bytes;
+                    final fileName = result.files.first.name;
 
-                  final newFile = await saveFilePermanent(file);
-                  print('from path: ${file.path}');
-                  print('to path: ${newFile.path}');
+                    // upload file
+                    PlatformFile file = result.files.first;
+                    profilePicture = file;
+                    print(file.bytes);
+                    print(file.name);
+
+                    final newFile = await saveFilePermanent(file);
+                    print('from path: ${file.path}');
+                    print('to path: ${newFile.path}');
+                  }
                 },
                 child: const Text('Upload a profile picture')),
             Text('${profilePicture}'),
@@ -609,33 +616,6 @@ class _CitizenSignUpPageState extends State<CitizenSignUpPage> {
                             fontSize: 14.0);
                       }
                     });
-
-                    // _register(
-                    //     _nicController.text.trim(),
-                    //     "",
-                    //     _firstNameController.text.trim(),
-                    //     _lastNameController.text.trim(),
-                    //     _ageController.text.trim(),
-                    //     _descriptionController.text.trim(),
-                    //     _contactController.text.trim(),
-                    //     _addressController.text.trim(),
-                    //     _postalcodeController.text.trim(),
-                    //     _cityController.text.trim(),
-                    //     _provinceController.text.trim(),
-                    //     position.latitude,
-                    //     position.longitude,
-                    //     _professionController.text.trim(),
-                    //     _emailController.text.trim(),
-                    //     _qualifications,
-                    //     _passwordController.text.trim(),
-                    //     "birthCertificate",
-                    //     "cv",
-                    //     "passport",
-                    //     _confirmPasswordController.text.trim());
-                    // Navigator.of(context).pushNamedAndRemoveUntil(
-                    //   homeRoute,
-                    //   (route) => false,
-                    // );
                   } catch (e) {
                     Fluttertoast.showToast(
                         msg: 'Error signing up',

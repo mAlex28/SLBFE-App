@@ -206,15 +206,13 @@ export const getCitizenByNameSearch = async (req, res) => {
   }
 }
 
-export const getCitizenBySearch = async (req, res) => {
+export const getCitizensBySearch = async (req, res) => {
   const { searchQuery, qualifications } = req.query
 
   try {
     const name = new RegExp(searchQuery, "i")
 
-    const citizens = await CitizenModel.find({
-      $or: [{ name }, { qualifications: { $in: qualifications.split(",") } }],
-    })
+    const citizens = await CitizenModel.find({ $or: [ { name }, { qualifications: { $in: qualifications.split(',') } }]});
 
     res.json({ data: citizens })
   } catch (error) {

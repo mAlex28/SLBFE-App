@@ -60,19 +60,6 @@ class _CompanyProfilePageState extends State<CompanyProfilePage> {
         padding: const EdgeInsets.all(10.0),
         child: Column(
           children: [
-            // widget.citizen['profilePic'] != null ||
-            //         widget.citizen['profilePic'] == ""
-            //     ? Container(
-            //         width: double.infinity,
-            //         child: Container(
-            //           alignment: const Alignment(0.0, 2.5),
-            //           child: CircleAvatar(
-            //             foregroundImage:
-            //                 AssetImage('${widget.citizen['profilePic']}'),
-            //             radius: 60.0,
-            //           ),
-            //         ),
-            //       )
             const SizedBox(
               height: 20,
             ),

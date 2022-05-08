@@ -79,6 +79,18 @@ class _CitizenProfilePageState extends State<CitizenProfilePage> {
             //           ),
             //         ),
             //       )
+            // Container(
+            //   margin: EdgeInsets.all(10),
+            //   child: widget.citizen['profilePic'] != null
+            //       ? Image.asset(
+            //           'assets/images/logo.png',
+            //           width: 150,
+            //           height: 100,
+            //           fit: BoxFit.cover,
+            //         )
+            //       : Image.memory(widget.citizen['profilePic'].toUint8List(),
+            //           width: 160, height: 160, fit: BoxFit.fill),
+            // ),
             const SizedBox(
               height: 20,
             ),
@@ -213,9 +225,6 @@ class _CitizenProfilePageState extends State<CitizenProfilePage> {
                     label: const Text('Send mail')),
                 TextButton.icon(
                     onPressed: () {
-                      var decoded = base64.decode(widget.citizen['profilePic']);
-                      print(utf8.decode(decoded));
-
                       String addressToCopy =
                           '${widget.citizen['address']}, ${widget.citizen['city']}, ${widget.citizen['province']} province, Sri Lanka (${widget.citizen['postalCode']})';
 
