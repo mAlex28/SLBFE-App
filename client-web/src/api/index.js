@@ -1,6 +1,7 @@
 import axios from 'axios'
 
-const API = axios.create({ baseURL: 'https://slbfe-api-app.herokuapp.com/' })
+// To Use the hosted API - https://slbfe-api-app.herokuapp.com/
+const API = axios.create({ baseURL: 'http://localhost:5000/' })
 
 API.interceptors.request.use((req) => {
   if (localStorage.getItem('profile')) {
