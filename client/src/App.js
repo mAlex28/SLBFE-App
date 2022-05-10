@@ -6,6 +6,7 @@ import PostDetails from './components/PostDetails/PostDetails'
 import Navbar from './components/Navbar/Navbar'
 import Home from './components/Home/Home'
 import CompanyHome from './components/CompanyHome/CompanyHome'
+import ComplainHome from './components/ComplainHome/ComplainHome'
 import Auth from './components/Auth/Auth'
 import CreatorOrTag from './components/CreatorOrTag/CreatorOrTag'
 
@@ -22,6 +23,7 @@ const App = () => {
         <Route path="/citizens/:id" exact component={PostDetails} />
         <Route path="/companies" exact component={CompanyHome} />
         <Route path="/companies/search" exact component={CompanyHome} />
+        <Route path="/complains" exact component={ComplainHome} />
         <Route
           path={['/creators/:name', '/tags/:name']}
           component={CreatorOrTag}

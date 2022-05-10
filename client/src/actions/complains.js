@@ -13,10 +13,10 @@ export const getComplains = (page) => async (dispatch) => {
     }
 };
 
-export const getComplainsByCreator = (name) => async (dispatch) => {
+export const getComplainsByCreator = (email) => async (dispatch) => {
     try {
         dispatch({ type: START_LOADING });
-        const { data: { data } } = await api.fetchComplainsByCreator(name);
+        const { data: { data } } = await api.fetchComplainsByCreator(email);
 
         dispatch({ type: FETCH_BY_CREATOR, payload: { data } });
         dispatch({ type: END_LOADING });

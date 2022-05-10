@@ -1,10 +1,24 @@
 import ComplainModel from '../models/complains.js'
 
 export const getAllComplains = async (req, res) => {
-  try {
-    const complains = await ComplainModel.find()
+  const { page } = req.query
 
-    res.status(200).json(complains)
+  try {
+    // paging the response
+    const LIMIT = 8
+    const startIndex = (Number(page) - 1) * LIMIT
+
+    const total = await ComplainModel.countDocuments()
+    const complains = await ComplainModel.find()
+      .sort({ _id: -1 })
+      .limit(LIMIT)
+      .skip(startIndex)
+
+    res.json({
+      data: complains,
+      currentPage: Number(page),
+      numberOfPages: Math.ceil(total / LIMIT),
+    })
   } catch (error) {
     res.status(404).json({ message: 'Something went wrong' })
   }

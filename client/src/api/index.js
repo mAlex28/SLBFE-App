@@ -24,7 +24,7 @@ export const updateCompany = (id, updatedCompany) => API.patch(`/companies/${id}
 export const deleteCompany = (id) => API.delete(`/companies/${id}`);
 
 export const fetchComplains = (page) => API.get(`complains?page=${page}`);
-export const fetchComplainsByCreator = (name) => API.get(`complains/creator?name=${name}`);
+export const fetchComplainsByCreator = (email) => API.get(`complains/creator?email=${email}`);
 export const createComplains = (complain) => API.post('complains/create', complain);
 
 export const signIn = (formData) => API.post('/officers/signin', formData);
