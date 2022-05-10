@@ -1,41 +1,36 @@
 import React, { useState } from 'react';
-import { Card, CardActions, CardContent, CardMedia, Button, Typography, ButtonBase, CardHeader, Avatar, IconButton } from '@material-ui/core/';
+import { Card, CardActions, CardContent, Button, Typography, CardHeader, Avatar, IconButton } from '@material-ui/core/';
 import DeleteIcon from '@material-ui/icons/Delete';
 import DoneIcon from '@material-ui/icons/Done'
 import PhoneInTalkIcon from '@material-ui/icons/PhoneInTalk'
 import EmailIcon from '@material-ui/icons/Email'
 import CloseIcon from '@material-ui/icons/Close'
-import { useDispatch } from 'react-redux';
 import { useHistory, Link} from 'react-router-dom';
 
 import { likePost, deletePost } from '../../../actions/posts';
 import useStyles from './styles';
 
-const Post = ({ citizen, setCurrentId }) => {
-  const user = JSON.parse(localStorage.getItem('profile'));
-  const dispatch = useDispatch();
+const Citizen = ({ citizen }) => {
   const history = useHistory();
   const classes = useStyles();
 
-  const userId = user?.result?._id;
-
   const viewCitizen = (e) => {
-    // dispatch(getPost(post._id, history));
-
     history.push(`/citizens/${citizen._id}`);
   };
 
   return (
    <Card
       elevation={5}
-      sx={{
-        width: '80%',
+      style={{
         padding: '10px',
-        marginTop: '20px',
+        marginTop: '10px',
         marginBottom: '10px',
       }}
     >
       <CardHeader
+        style={{
+          cursor:'pointer'
+        }}
         onClick={viewCitizen}
         avatar={
           citizen.profilePic ? (
@@ -45,7 +40,7 @@ const Post = ({ citizen, setCurrentId }) => {
               aria-label="avatar"
             />
           ) : (
-            <Avatar sx={{ bgcolor: 'red' }} aria-label="avatar">
+            <Avatar style={{ backgroundColor: '#34495e' }} aria-label="avatar">
               {citizen.name.charAt(0)}
             </Avatar>
           )
@@ -53,28 +48,20 @@ const Post = ({ citizen, setCurrentId }) => {
         action={
           citizen.isVerified ? (
             <Button
+              className={classes.verifyButton}
               variant="outlined"
-              color="success"
               startIcon={
-                <DoneIcon
-                  sx={{
-                    color: '#4caf50',
-                  }}
-                />
+                <DoneIcon />
               }
             >
               Verified
             </Button>
           ) : (
             <Button
+              className={classes.notVerifiedButton}
               variant="outlined"
-              color="warning"
               startIcon={
-                <CloseIcon
-                  sx={{
-                    color: '#4caf50',
-                  }}
-                />
+                <CloseIcon />
               }
             >
               Not Verified
@@ -85,7 +72,7 @@ const Post = ({ citizen, setCurrentId }) => {
         subheader={citizen.profession}
       />
       <CardContent>
-        <Typography variant="body2" color="text.secondary">
+        <Typography variant="body2" color="textPrimary">
           {citizen.description.split(' ').splice(0, 50).join(' ')}...
         </Typography>
       </CardContent>
@@ -96,16 +83,17 @@ const Post = ({ citizen, setCurrentId }) => {
           margin: '20px',
         }}
       >
-        <Typography variant="body2" color="GrayText" component="p">
+        <Typography variant="body2" color="textSecondary" component="p">
           {citizen.qualifications.map((qualification) => `#${qualification} `)}
         </Typography>
       </div>
+      {/* </ButtonBase> */}
       <CardActions disableSpacing>
         <Link
           to="#"
           onClick={() => (window.location.href = `tel:${citizen.contact}`)}
         >
-          <IconButton aria-label="call">
+          <IconButton aria-label="call" color="primary">
             <PhoneInTalkIcon />
           </IconButton>
         </Link>
@@ -113,7 +101,7 @@ const Post = ({ citizen, setCurrentId }) => {
           to="#"
           onClick={() => (window.location.href = `mailto:${citizen.email}`)}
         >
-          <IconButton aria-label="email">
+          <IconButton aria-label="email" color="primary">
             <EmailIcon />
           </IconButton>
         </Link>
@@ -122,5 +110,5 @@ const Post = ({ citizen, setCurrentId }) => {
   );
 };
 
-export default Post;
+export default Citizen;
 

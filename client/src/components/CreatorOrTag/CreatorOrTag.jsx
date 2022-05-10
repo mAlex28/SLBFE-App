@@ -3,7 +3,7 @@ import { useParams, useLocation } from 'react-router-dom';
 import { Typography, CircularProgress, Grid, Divider } from '@material-ui/core';
 import { useDispatch, useSelector } from 'react-redux';
 
-import Post from '../Posts/Post/Post';
+import Citizen from '../Posts/Citizen/Citizen';
 import { getPostsByCreator, getPostsBySearch } from '../../actions/posts';
 
 const CreatorOrTag = () => {
@@ -31,7 +31,7 @@ const CreatorOrTag = () => {
         <Grid container alignItems="stretch" spacing={3}>
           {posts?.map((post) => (
             <Grid key={post._id} item xs={12} sm={12} md={6} lg={3}>
-              <Post post={post} />
+              <Citizen post={post} />
             </Grid>
           ))}
         </Grid>
