@@ -67,7 +67,7 @@ export const updateCompany = async (req, res) => {
   if (!mongoose.Types.ObjectId.isValid(_id))
     return res.status(404).send('No company found')
 
-  const updatedCompany = await CompanyModel.findByIdAndUpdate( _id,
+  const updatedCompany = await CompanyModel.findByIdAndUpdate(_id,
     { ...company, _id },
     {
       new: true,
@@ -79,15 +79,11 @@ export const updateCompany = async (req, res) => {
 export const deleteCompany = async (req, res) => {
   const { id } = req.params
 
-  const companyId = mongoose.Types.ObjectId(id)
-
   // to make sure the id is valid
   if (!mongoose.Types.ObjectId.isValid(id))
     return res.status(404).send('No company found')
 
-  await CompanyModel.findByIdAndRemove(companyId)
-  // res.status(200).send('Deletion success');
-    
+  await CompanyModel.findByIdAndRemove(id)
 }
 
 export const signin = async (req, res) => {
@@ -99,7 +95,7 @@ export const signin = async (req, res) => {
       return res.status(404).json({ message: "User doesn't exist" })
 
     const isPasswordCorrect = await bcrypt.compare(
-      password, 
+      password,
       existingUser.password
     )
     if (!isPasswordCorrect)
@@ -129,6 +125,7 @@ export const signup = async (req, res) => {
     city,
     province,
     country,
+    website,
     email,
     password,
     companyFields,
@@ -153,6 +150,7 @@ export const signup = async (req, res) => {
       city,
       province,
       country,
+      website,
       email,
       password: hashedPassword,
       companyFields,

@@ -2,6 +2,8 @@ import React from 'react';
 import { Card, CardActions, CardContent, Typography, CardHeader, IconButton } from '@material-ui/core/';
 import EmailIcon from '@material-ui/icons/Email'
 import { Link } from 'react-router-dom';
+import moment from 'moment';
+
 
 const Complain = ({ complain }) => {
     return (
@@ -20,6 +22,9 @@ const Complain = ({ complain }) => {
             <CardContent>
                 <Typography variant="body2" color="textPrimary">
                     {complain.complainText.split(' ').splice(0, 50).join(' ')}...
+                </Typography>
+                <Typography variant="body2" color="textSecondary">
+                    {moment(complain.createdAt).fromNow()}
                 </Typography>
             </CardContent>
             <CardActions disableSpacing>

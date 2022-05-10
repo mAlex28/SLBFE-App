@@ -8,6 +8,8 @@ export const getCompany = (id) => async (dispatch) => {
         const { data } = await api.fetchCompany(id);
 
         dispatch({ type: FETCH_POST, payload: { company: data } });
+        dispatch({ type: END_LOADING });
+
     } catch (error) {
         console.log(error);
     }

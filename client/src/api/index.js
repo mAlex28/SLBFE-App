@@ -13,11 +13,11 @@ API.interceptors.request.use((req) => {
 export const fetchCitizen = (id) => API.get(`/citizens/${id}`);
 export const fetchCitizens = (page) => API.get(`/citizens?page=${page}`);
 export const fetchCitizensByName = (name) => API.get(`/citizens/creator?name=${name}`);
-export const fetchCitizensBySearch = (searchQuery) => API.get(`/citizens/search?searchQuery=${searchQuery.search || 'none'}&qualifications=${searchQuery.tags}`);
+export const fetchCitizensBySearch = (searchQuery) => API.get(`/citizens/search?nicQuery=${searchQuery.search || 'none'}&nameQuery=${searchQuery.name || 'none'}&qualifications=${searchQuery.tags}`);
 export const updateCitizen = (id, updatedCitizen) => API.patch(`/citizens/${id}`, updatedCitizen);
 export const deleteCitizen = (id) => API.delete(`/citizens/${id}`);
 
-export const fetchCompany = (id) => API.get(`companies`)
+export const fetchCompany = (id) => API.get(`/companies/${id}`)
 export const fetchCompanies = (page) => API.get(`/companies?page=${page}`);
 export const fetchCompaniesBySearch = (searchQuery) => API.get(`/companies/search?searchQuery=${searchQuery.search || 'none'}&companyFields=${searchQuery.tags}`);
 export const updateCompany = (id, updatedCompany) => API.patch(`/companies/${id}`, updatedCompany);

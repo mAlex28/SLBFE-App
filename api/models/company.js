@@ -11,6 +11,7 @@ const companySchema = mongoose.Schema(
     country: { type: String, required: true },
     email: { type: String, required: true },
     password: { type: String, required: true },
+    website: { type: String },
     companyFields: [String],
     id: { type: String },
   },

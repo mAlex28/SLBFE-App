@@ -21,6 +21,6 @@ router.post('/signin', signin)
 router.post('/signup', signup)
 
 router.patch('/:id', updateCompany)
-router.delete('/delete/:id', deleteCompany)
+router.delete('/:id', auth, deleteCompany)
 
 export default router

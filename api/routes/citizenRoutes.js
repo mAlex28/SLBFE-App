@@ -19,7 +19,7 @@ const router = express.Router()
 router.get("/", getAllCitizens)
 router.get("/:id", getCitizen)
 router.get("/search", getCitizensBySearch)
-router.get("/all", getCitizensWithoutPagination)
+router.get('/pagination', getCitizensWithoutPagination)
 router.get("/creator", getCitizenByName)
 router.get("/nic", getCitizenByNIC)
 

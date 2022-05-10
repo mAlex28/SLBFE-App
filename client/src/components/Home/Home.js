@@ -22,13 +22,14 @@ const Home = () => {
   const dispatch = useDispatch();
 
   const [search, setSearch] = useState('');
+  const [name, setName] = useState('');
   const [tags, setTags] = useState([]);
   const history = useHistory();
 
   const searchPost = () => {
     if (search.trim() || tags) {
-      dispatch(getCitizensBySearch({ search, tags: tags.join(',') }));
-      history.push(`/citizens/search?searchQuery=${search || 'none'}&qualifications=${tags.join(',')}`);
+      dispatch(getCitizensBySearch({ search, name, tags: tags.join(',') }));
+      history.push(`/citizens/search?nicQuery=${search || 'none'}&nameQuery=${name || 'none'}&qualifications=${tags.join(',')}`);
     } else {
       history.push('/');
     }
@@ -53,7 +54,8 @@ const Home = () => {
           </Grid>
           <Grid item xs={12} sm={6} md={3}>
             <AppBar className={classes.appBarSearch} position="static" color="inherit">
-              <TextField onKeyDown={handleKeyPress} name="search" variant="outlined" label="Search by Name" fullWidth value={search} onChange={(e) => setSearch(e.target.value)} />
+              <TextField onKeyDown={handleKeyPress} name="name" variant="outlined" label="Search by NIC" fullWidth value={search} onChange={(e) => setSearch(e.target.value)} />
+              <TextField onKeyDown={handleKeyPress} name="search" variant="outlined" label="Search by Name" fullWidth value={search} onChange={(e) => setName(e.target.value)} />
               <ChipInput
                 style={{ margin: '10px 0' }}
                 value={tags}

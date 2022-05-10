@@ -27,12 +27,6 @@ export default makeStyles((theme) => ({
       marginLeft: 0,
     },
   },
-  recommendedPosts: {
-    display: 'flex',
-    [theme.breakpoints.down('sm')]: {
-      flexDirection: 'column',
-    },
-  },
   loadingPaper: {
     display: 'flex',
     justifyContent: 'center',
@@ -41,13 +35,10 @@ export default makeStyles((theme) => ({
     borderRadius: '15px',
     height: '39vh',
   },
-  commentsOuterContainer: {
-    display: 'flex',
-    justifyContent: 'space-between',
+  verifyButton: {
+    color: '#4caf50',
   },
-  commentsInnerContainer: {
-    height: '200px',
-    overflowY: 'auto',
-    marginRight: '30px',
-  },
+  notVerifiedButton: {
+    color: '#c0392b',
+  }
 }));

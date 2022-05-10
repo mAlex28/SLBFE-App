@@ -128,9 +128,9 @@ export const getAllCitizens = async (req, res) => {
 
 export const getCitizensWithoutPagination = async (req, res) => {
   try {
-    const citizens = await CitizenModel.find()
+    const citizens = await CitizenModel.find({})
 
-    res.status(200).json(citizens)
+    res.json(citizens)
   } catch (error) {
     res.status(404).json({ message: error.message })
   }
@@ -191,21 +191,22 @@ export const getCitizenByName = async (req, res) => {
 
     res.json({ data: citizens })
   } catch (error) {
-    res.status(404).json({ message: 'nomsg' })
+    res.status(404).json({ message: error.message })
   }
 }
 
 export const getCitizensBySearch = async (req, res) => {
-  const { searchQuery, qualifications } = req.query
+  const { nicQuery, nameQuery, qualifications } = req.query;
 
   try {
-    const nic = new RegExp(searchQuery, 'i')
+    const nic = new RegExp(nicQuery, 'i');
+    const name = new RegExp(nameQuery, 'i');
 
-    const citizen = await CitizenModel.find({ $or: [{ nic }, { qualifications: { $in: qualifications.split(',') } }] })
+    const citizen = await CitizenModel.find({ $or: [{ nic }, { name }, { qualifications: { $in: qualifications.split(',') } }] });
 
     res.json({ data: citizen })
 
   } catch (error) {
-    res.status(404).json({ message: error.message })
+    res.status(404).json({ message: 'no' })
   }
 }

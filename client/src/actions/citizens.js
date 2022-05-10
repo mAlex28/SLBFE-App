@@ -8,6 +8,8 @@ export const getCitizen = (id) => async (dispatch) => {
     const { data } = await api.fetchCitizen(id);
 
     dispatch({ type: FETCH_POST, payload: { citizen: data } });
+    dispatch({ type: END_LOADING });
+
   } catch (error) {
     console.log(error);
   }

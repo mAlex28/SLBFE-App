@@ -1,8 +1,8 @@
 import React from 'react'
-import { Container } from '@material-ui/core'
 import { BrowserRouter, Switch, Route, Redirect } from 'react-router-dom'
 
-import PostDetails from './components/PostDetails/PostDetails'
+import CitizenDetails from './components/CitizenDetails/CitizenDetails'
+import CompanyDetails from './components/CompanyDetails/CompanyDetails'
 import Navbar from './components/Navbar/Navbar'
 import Home from './components/Home/Home'
 import CompanyHome from './components/CompanyHome/CompanyHome'
@@ -20,9 +20,10 @@ const App = () => {
         <Route path="/" exact component={() => <Redirect to="/citizens" />} />
         <Route path="/citizens" exact component={Home} />
         <Route path="/citizens/search" exact component={Home} />
-        <Route path="/citizens/:id" exact component={PostDetails} />
+        <Route path="/citizens/:id" exact component={CitizenDetails} />
         <Route path="/companies" exact component={CompanyHome} />
         <Route path="/companies/search" exact component={CompanyHome} />
+        <Route path="/companies/:id" exact component={CompanyDetails} />
         <Route path="/complains" exact component={ComplainHome} />
         <Route
           path={['/creators/:name', '/tags/:name']}
