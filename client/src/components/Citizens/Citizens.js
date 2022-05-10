@@ -6,15 +6,15 @@ import useStyles from './styles';
 import Citizen from './Citizen/Citizen';
 
 const Citizens = ({ setCurrentId }) => {
-  const { posts, isLoading } = useSelector((state) => state.posts);
+  const { citizens, isLoading } = useSelector((state) => state.citizens);
   const classes = useStyles();
 
-  if (!posts.length && !isLoading) return 'No posts';
+  if (!citizens.length && !isLoading) return 'No citizens';
 
   return (
     isLoading ? <CircularProgress /> : (
       <Grid className={classes.container} container alignItems="stretch" spacing={3}>
-        {posts?.map((post) => (
+        {citizens?.map((post) => (
           <Grid key={post._id} item xs={12} sm={12} md={12} lg={12}>
             <Citizen citizen={post} setCurrentId={setCurrentId} />
           </Grid>

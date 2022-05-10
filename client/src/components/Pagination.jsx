@@ -4,18 +4,18 @@ import { useDispatch, useSelector } from 'react-redux';
 import { Pagination, PaginationItem } from '@material-ui/lab';
 import { Link } from 'react-router-dom';
 
-import { getPosts } from '../actions/posts';
+import { getCitizens } from '../actions/citizens';
 import useStyles from './styles';
 
 const Paginate = ({ page }) => {
-  const { numberOfPages } = useSelector((state) => state.posts);
+  const { numberOfPages } = useSelector((state) => state.citizens);
   const dispatch = useDispatch();
 
   const classes = useStyles();
 
   useEffect(() => {
     if (page) {
-      dispatch(getPosts(page));
+      dispatch(getCitizens(page));
     }
   }, [dispatch, page]);
 

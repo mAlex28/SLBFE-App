@@ -1,13 +1,11 @@
-import React, { useState } from 'react';
+import React from 'react';
 import { Card, CardActions, CardContent, Button, Typography, CardHeader, Avatar, IconButton } from '@material-ui/core/';
-import DeleteIcon from '@material-ui/icons/Delete';
 import DoneIcon from '@material-ui/icons/Done'
 import PhoneInTalkIcon from '@material-ui/icons/PhoneInTalk'
 import EmailIcon from '@material-ui/icons/Email'
 import CloseIcon from '@material-ui/icons/Close'
-import { useHistory, Link} from 'react-router-dom';
+import { useHistory, Link } from 'react-router-dom';
 
-import { likePost, deletePost } from '../../../actions/posts';
 import useStyles from './styles';
 
 const Citizen = ({ citizen }) => {
@@ -19,7 +17,7 @@ const Citizen = ({ citizen }) => {
   };
 
   return (
-   <Card
+    <Card
       elevation={5}
       style={{
         padding: '10px',
@@ -29,7 +27,7 @@ const Citizen = ({ citizen }) => {
     >
       <CardHeader
         style={{
-          cursor:'pointer'
+          cursor: 'pointer'
         }}
         onClick={viewCitizen}
         avatar={

@@ -196,12 +196,12 @@ export const getCitizenByName = async (req, res) => {
 }
 
 export const getCitizensBySearch = async (req, res) => {
-  const { searchQuery, tags } = req.query
+  const { searchQuery, qualifications } = req.query
 
   try {
     const name = new RegExp(searchQuery, 'i')
 
-    const company = await CitizenModel.find({ $or: [{ name }, { qualifications: { $in: tags.split(',') } }] })
+    const company = await CitizenModel.find({ $or: [{ name }, { qualifications: { $in: qualifications.split(',') } }] })
 
     res.json({ data: company })
 

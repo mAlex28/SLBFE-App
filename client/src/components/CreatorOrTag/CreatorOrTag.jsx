@@ -3,25 +3,25 @@ import { useParams, useLocation } from 'react-router-dom';
 import { Typography, CircularProgress, Grid, Divider } from '@material-ui/core';
 import { useDispatch, useSelector } from 'react-redux';
 
-import Citizen from '../Posts/Citizen/Citizen';
-import { getPostsByCreator, getPostsBySearch } from '../../actions/posts';
+import Citizen from '../Citizens/Citizen/Citizen';
+import { getCitizensByName, getCitizensBySearch } from '../../actions/citizens';
 
 const CreatorOrTag = () => {
   const { name } = useParams();
   const dispatch = useDispatch();
-  const { posts, isLoading } = useSelector((state) => state.posts);
+  const { citizens, isLoading } = useSelector((state) => state.citizens);
 
   const location = useLocation();
 
   useEffect(() => {
     if (location.pathname.startsWith('/tags')) {
-      dispatch(getPostsBySearch({ tags: name }));
+      dispatch(getCitizensBySearch({ tags: name }));
     } else {
-      dispatch(getPostsByCreator(name));
+      dispatch(getCitizensByName(name));
     }
   }, []);
 
-  if (!posts.length && !isLoading) return 'No posts';
+  if (!citizens.length && !isLoading) return 'No citizens';
 
   return (
     <div>
@@ -29,7 +29,7 @@ const CreatorOrTag = () => {
       <Divider style={{ margin: '20px 0 50px 0' }} />
       {isLoading ? <CircularProgress /> : (
         <Grid container alignItems="stretch" spacing={3}>
-          {posts?.map((post) => (
+          {citizens?.map((post) => (
             <Grid key={post._id} item xs={12} sm={12} md={6} lg={3}>
               <Citizen post={post} />
             </Grid>

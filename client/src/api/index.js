@@ -10,14 +10,12 @@ API.interceptors.request.use((req) => {
   return req;
 });
 
-export const fetchPost = (id) => API.get(`/citizens/${id}`);
-export const fetchPosts = (page) => API.get(`/citizens?page=${page}`);
-export const fetchPostsByCreator = (name) => API.get(`/citizens/creator?name=${name}`);
-export const fetchPostsBySearch = (searchQuery) => API.get(`/citizens/search?searchQuery=${searchQuery.search || 'none'}&qualifications=${searchQuery.tags}`);
-export const createPost = (newPost) => API.post('/citizens', newPost);
-export const comment = (value, id) => API.post(`/citizens/${id}/commentPost`, { value });
-export const updatePost = (id, updatedPost) => API.patch(`/citizens/${id}`, updatedPost);
-export const deletePost = (id) => API.delete(`/citizens/${id}`);
+export const fetchCitizen = (id) => API.get(`/citizens/${id}`);
+export const fetchCitizens = (page) => API.get(`/citizens?page=${page}`);
+export const fetchCitizensByName = (name) => API.get(`/citizens/creator?name=${name}`);
+export const fetchCitizensBySearch = (searchQuery) => API.get(`/citizens/search?searchQuery=${searchQuery.search || 'none'}&qualifications=${searchQuery.tags}`);
+export const updateCitizen = (id, updatedCitizen) => API.patch(`/citizens/${id}`, updatedCitizen);
+export const deleteCitizen = (id) => API.delete(`/citizens/${id}`);
 
 export const fetchCompany = (id) => API.get(`companies`)
 export const fetchCompanies = (page) => API.get(`/companies?page=${page}`);

@@ -4,9 +4,8 @@ import { useDispatch } from 'react-redux';
 import { useHistory, useLocation } from 'react-router-dom';
 import ChipInput from 'material-ui-chip-input';
 
-import { getPostsBySearch } from '../../actions/posts';
+import { getCitizensBySearch } from '../../actions/citizens';
 import Citizens from '../Citizens/Citizens';
-import Form from '../Form/Form';
 import Pagination from '../Pagination';
 import useStyles from './styles';
 
@@ -28,8 +27,8 @@ const Home = () => {
 
   const searchPost = () => {
     if (search.trim() || tags) {
-      dispatch(getPostsBySearch({ search, tags: tags.join(',') }));
-      history.push(`/citizens/search?searchQuery=${search || 'none'}&tags=${tags.join(',')}`);
+      dispatch(getCitizensBySearch({ search, tags: tags.join(',') }));
+      history.push(`/citizens/search?searchQuery=${search || 'none'}&qualifications=${tags.join(',')}`);
     } else {
       history.push('/');
     }
