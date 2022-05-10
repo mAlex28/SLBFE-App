@@ -28,11 +28,12 @@ export const makeComplains = async (req, res) => {
 }
 
 export const getComplainsByUser = async (req, res) => {
-  const { id } = req.params
+  const { email } = req.query
 
-  if (!mongoose.Types.ObjectId.isValid(id))
-    return res.status(404).send('No user found')
   try {
+    const complains = await ComplainModel.find({ email })
+
+    res.json(complains)
   } catch (error) {
     res.status(500).json({ message: 'Something went wrong' })
   }

@@ -298,8 +298,6 @@ class _CompanySignUpPageState extends State<CompanySignUpPage> {
             ),
             GestureDetector(
               onTap: () async {
-                print(_fields);
-
                 if (_formKey.currentState!.validate()) {
                   _formKey.currentState!.save();
                   try {

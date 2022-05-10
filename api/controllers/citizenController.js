@@ -1,11 +1,9 @@
 import mongoose from "mongoose"
-import express from "express"
 import bcrypt from "bcryptjs"
 import jwt from "jsonwebtoken"
 
 import CitizenModel from "../models/citizen.js"
 
-const router = express.Router()
 export const signin = async (req, res) => {
   const { email, password } = req.body
 
@@ -115,11 +113,8 @@ export const getAllCitizens = async (req, res) => {
     const LIMIT = 8
     const startIndex = (Number(page) - 1) * LIMIT
 
-    const total = await CitizenModel.countDocuments()
-    const citizens = await CitizenModel.find()
-      .sort({ _id: -1 })
-      .limit(LIMIT)
-      .skip(startIndex)
+    const total = await CitizenModel.countDocuments({})
+    const citizens = await CitizenModel.find().sort({ _id: -1 }).limit(LIMIT).skip(startIndex)
 
     res.json({
       data: citizens,
@@ -133,9 +128,9 @@ export const getAllCitizens = async (req, res) => {
 
 export const getCitizensWithoutPagination = async (req, res) => {
   try {
-    const citizens = await CitizenModel.find({})
+    const citizens = await CitizenModel.find()
 
-    res.json(citizens)
+    res.status(200).json(citizens)
   } catch (error) {
     res.status(404).json({ message: error.message })
   }
@@ -162,13 +157,7 @@ export const updateCitizen = async (req, res) => {
   if (!mongoose.Types.ObjectId.isValid(_id))
     return res.status(404).send("No citizen found")
 
-  const updatedCitizen = await CitizenModel.findByIdAndUpdate(
-    _id,
-    { ...citizen, _id },
-    {
-      new: true,
-    }
-  )
+  const updatedCitizen = await CitizenModel.findByIdAndUpdate(_id, { ...citizen, _id }, { new: true })
   res.json(updatedCitizen)
 }
 
@@ -182,7 +171,7 @@ export const deleteCitizen = async (req, res) => {
   await CitizenModel.findByIdAndRemove(id)
 }
 
-export const getCitizenByNICSearch = async (req, res) => {
+export const getCitizenByNIC = async (req, res) => {
   const { nic } = req.query
 
   try {
@@ -194,7 +183,7 @@ export const getCitizenByNICSearch = async (req, res) => {
   }
 }
 
-export const getCitizenByNameSearch = async (req, res) => {
+export const getCitizenByName = async (req, res) => {
   const { name } = req.query
 
   try {
@@ -202,23 +191,21 @@ export const getCitizenByNameSearch = async (req, res) => {
 
     res.json({ data: citizens })
   } catch (error) {
-    res.status(404).json({ message: error.message })
+    res.status(404).json({ message: 'nomsg' })
   }
 }
 
 export const getCitizensBySearch = async (req, res) => {
-  const { searchQuery, qualifications } = req.query
+  const { searchQuery, tags } = req.query
 
   try {
-    const name = new RegExp(searchQuery, "i")
+    const name = new RegExp(searchQuery, 'i')
 
-    const citizens = await CitizenModel.find({ $or: [ { name }, { qualifications: { $in: qualifications.split(',') } }]});
+    const company = await CitizenModel.find({ $or: [{ name }, { qualifications: { $in: tags.split(',') } }] })
 
-    res.json({ data: citizens })
+    res.json({ data: company })
+
   } catch (error) {
-    console.log(error)
     res.status(404).json({ message: error.message })
   }
 }
-
-export default router

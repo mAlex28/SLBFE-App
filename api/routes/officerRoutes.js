@@ -1,9 +1,9 @@
-import expres from 'express'
+import express from 'express'
 import { signin, signup } from '../controllers/officerController.js'
 
-const router = expres.Router()
+const router = express.Router()
 
-// http:localhost:5000/officer
+// http://localhost:5000/officers
 router.post('/signin', signin)
 router.post('/signup', signup)
 

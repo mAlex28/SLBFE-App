@@ -43,6 +43,21 @@ export const getCompany = async (req, res) => {
   }
 }
 
+export const getCompanyBySearch = async (req, res) => {
+  const { searchQuery, companyFields } = req.query
+
+  try {
+    const companyName = new RegExp(searchQuery, 'i')
+
+    const company = await CompanyModel.find({ $or: [{ companyName }, { companyFields: { $in: companyFields.split(',') } }] })
+
+    res.json({ data: company })
+
+  } catch (error) {
+    res.status(404).json({ message: error.message })
+  }
+}
+
 export const updateCompany = async (req, res) => {
   // renamed the id
   const { id: _id } = req.params
@@ -52,8 +67,7 @@ export const updateCompany = async (req, res) => {
   if (!mongoose.Types.ObjectId.isValid(_id))
     return res.status(404).send('No company found')
 
-  const updatedCompany = await CompanyModel.findByIdAndUpdate(
-    _id,
+  const updatedCompany = await CompanyModel.findByIdAndUpdate( _id,
     { ...company, _id },
     {
       new: true,
@@ -65,11 +79,15 @@ export const updateCompany = async (req, res) => {
 export const deleteCompany = async (req, res) => {
   const { id } = req.params
 
+  const companyId = mongoose.Types.ObjectId(id)
+
   // to make sure the id is valid
   if (!mongoose.Types.ObjectId.isValid(id))
     return res.status(404).send('No company found')
 
-  await CompanyModel.findByIdAndRemove(id)
+  await CompanyModel.findByIdAndRemove(companyId)
+  // res.status(200).send('Deletion success');
+    
 }
 
 export const signin = async (req, res) => {
@@ -81,7 +99,7 @@ export const signin = async (req, res) => {
       return res.status(404).json({ message: "User doesn't exist" })
 
     const isPasswordCorrect = await bcrypt.compare(
-      password,
+      password, 
       existingUser.password
     )
     if (!isPasswordCorrect)
@@ -153,30 +171,3 @@ export const signup = async (req, res) => {
   }
 }
 
-export const getCompanyByNameSearch = async (req, res) => {
-  const { companyName } = req.query
-
-  try {
-    const company = await CompanyModel.find({ companyName })
-
-    res.json({ data: company })
-  } catch (error) {
-    res.status(404).json({ message: error.message })
-  }
-}
-
-export const getCompanyByQualificationSearch = async (req, res) => {
-  const { searchQuery, companyFields } = req.query
-
-  try {
-    const title = new RegExp(searchQuery, 'i')
-
-    const company = await CompanyModel.find({
-      $or: [{ title }, { companyFields: { $in: companyFields.split(',') } }],
-    })
-
-    res.json({ data: company })
-  } catch (error) {
-    res.status(404).json({ message: error.message })
-  }
-}

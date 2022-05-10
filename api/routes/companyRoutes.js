@@ -1,21 +1,26 @@
-import expres from 'express'
+import express from 'express'
 import {
   getCompany,
   getAllCompanies,
+  getCompanyBySearch,
   updateCompany,
   deleteCompany,
   signin,
   signup,
 } from '../controllers/companyController.js'
+import auth from '../middleware/auth.js'
 
-const router = expres.Router()
+const router = express.Router()
 
-// http:localhost:5000/company
+// http://localhost:5000/companies
 router.get('/', getAllCompanies)
+router.get('/search', getCompanyBySearch)
+router.get('/:id', getCompany)
+
 router.post('/signin', signin)
 router.post('/signup', signup)
-router.get('/:id', getCompany)
+
 router.patch('/:id', updateCompany)
-router.delete('/:id', deleteCompany)
+router.delete('/delete/:id', deleteCompany)
 
 export default router
