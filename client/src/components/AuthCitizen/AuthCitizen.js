@@ -148,7 +148,7 @@ const SignUp = () => {
                     <LockOutlinedIcon />
                 </Avatar>
                 <Typography component="h1" variant="h5">
-                    {isSignup ? 'Sign up' : 'Sign in'}
+                    {isSignup ? 'Citizen Sign up' : 'Citizen Sign in'}
                 </Typography>
 
                 <form
@@ -240,7 +240,7 @@ const SignUp = () => {
                                         multiline
                                         required
                                         placeholder="Write something about you"
-                                        rows={4}
+                                        minRows={4}
                                         fullWidth
                                         onChange={handleChange}
                                     />

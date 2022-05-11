@@ -54,8 +54,8 @@ const Home = () => {
           </Grid>
           <Grid item xs={12} sm={6} md={3}>
             <AppBar className={classes.appBarSearch} position="static" color="inherit">
-              <TextField onKeyDown={handleKeyPress} name="name" variant="outlined" label="Search by NIC" fullWidth value={search} onChange={(e) => setSearch(e.target.value)} />
-              <TextField onKeyDown={handleKeyPress} name="search" variant="outlined" label="Search by Name" fullWidth value={search} onChange={(e) => setName(e.target.value)} />
+              <TextField onKeyDown={handleKeyPress} name="search" variant="outlined" label="Search by NIC" fullWidth value={search} onChange={(e) => setSearch(e.target.value)} />
+              <TextField onKeyDown={handleKeyPress} name="name" variant="outlined" label="Search by Name" fullWidth value={name} onChange={(e) => setName(e.target.value)} />
               <ChipInput
                 style={{ margin: '10px 0' }}
                 value={tags}

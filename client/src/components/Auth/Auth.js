@@ -59,7 +59,7 @@ const SignUp = () => {
             {isSignup && <Input name="confirmPassword" label="Repeat Password" handleChange={handleChange} type="password" />}
           </Grid>
           <Button type="submit" fullWidth variant="contained" color="primary" className={classes.submit}>
-            {isSignup ? 'Sign Up' : 'Sign In'}
+            {isSignup ? 'Officer Sign Up' : 'Officer Sign In'}
           </Button>
           <Grid container justifyContent="flex-end">
             <Grid item>

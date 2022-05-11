@@ -64,31 +64,26 @@ const Navbar = () => {
 
           {user?.result ? (
             <div className={classes.navlinks}>
-              <Link to="/home">
+              <div onClick={() => history.push('/home')}>
                 <Typography className={classes.link}>
                   Home
                 </Typography>
-
-              </Link>
-              <Link to="/citizens" >
+              </div>
+              <div onClick={() => history.push('/citizens')}>
                 <Typography className={classes.link}>
                   Citizens
                 </Typography>
-
-              </Link>
-              <Link to="/companies">
+              </div>
+              <div onClick={() => history.push('/companies')}>
                 <Typography className={classes.link}>
                   Companies
                 </Typography>
-
-              </Link>
-
-              <Link to="/complains">
+              </div>
+              <div onClick={() => history.push('/complains')}>
                 <Typography className={classes.link}>
                   Complains
                 </Typography>
-
-              </Link>
+              </div>
               <Avatar
                 alt={user?.result.name}
                 src={user?.result.profilePic}
