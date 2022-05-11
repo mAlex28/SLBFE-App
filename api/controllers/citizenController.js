@@ -199,10 +199,10 @@ export const getCitizensBySearch = async (req, res) => {
   const { nicQuery, nameQuery, qualifications } = req.query;
 
   try {
-    const nic = new RegExp(nicQuery, 'i');
-    const name = new RegExp(nameQuery, 'i');
+    const nic = new RegExp(nicQuery, "i");
+    const name = new RegExp(nameQuery, "i");
 
-    const citizen = await CitizenModel.find({ $or: [{ nic }, { name }, { qualifications: { $in: qualifications.split(',') } }] });
+    const citizen = await CitizenModel.find({ $or: [{ nic: nic }, { name: name }, { qualifications: { $in: qualifications.split(',') } }] });
 
     res.json({ data: citizen })
 
