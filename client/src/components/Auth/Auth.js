@@ -10,6 +10,7 @@ import Input from './Input';
 
 const initialState = { firstName: '', lastName: '', email: '', password: '', confirmPassword: '' };
 
+// This is the authentication for SLBFE officer
 const SignUp = () => {
   const [form, setForm] = useState(initialState);
   const [isSignup, setIsSignup] = useState(false);
@@ -64,6 +65,9 @@ const SignUp = () => {
             <Grid item>
               <Button onClick={switchMode}>
                 {isSignup ? 'Already have an account? Sign in' : "Don't have an account? Sign Up"}
+              </Button>
+              <Button onClick={() => history.push('/authcitizen')}>
+                Login As a Citizen
               </Button>
             </Grid>
           </Grid>

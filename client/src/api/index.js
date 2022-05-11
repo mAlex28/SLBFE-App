@@ -1,5 +1,7 @@
 import axios from 'axios';
 
+// hosted URL: https://slbfe-api-app.herokuapp.com/ - replace this with following baseURL to use the deployed version
+// Please note: Deployed version only resturn JSON reponses
 const API = axios.create({ baseURL: 'http://localhost:5000' });
 
 API.interceptors.request.use((req) => {
@@ -29,3 +31,6 @@ export const createComplains = (complain) => API.post('complains/create', compla
 
 export const signIn = (formData) => API.post('/officers/signin', formData);
 export const signUp = (formData) => API.post('/officers/signup', formData);
+
+export const citizenSignIn = (formData) => API.post('/citizens/signin', formData);
+export const citizenSignUp = (formData) => API.post('/citizens/signup', formData);
