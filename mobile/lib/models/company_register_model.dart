@@ -14,6 +14,7 @@ class CompanyRegisterRequest {
     required this.country,
     required this.email,
     required this.password,
+    required this.website,
     required this.companyFields,
     required this.confirmPassword,
   });
@@ -26,6 +27,7 @@ class CompanyRegisterRequest {
   late final String country;
   late final String email;
   late final String password;
+  late final String website;
   late final List<String> companyFields;
   late final String confirmPassword;
 
@@ -39,6 +41,7 @@ class CompanyRegisterRequest {
     country = json['country'];
     email = json['email'];
     password = json['password'];
+    website = json['webiste'];
     companyFields = List.castFrom<dynamic, String>(json['companyFields']);
     confirmPassword = json['confirmPassword'];
   }
@@ -54,6 +57,7 @@ class CompanyRegisterRequest {
     _data['country'] = country;
     _data['email'] = email;
     _data['password'] = password;
+    _data['website'] = website;
     _data['companyFields'] = companyFields;
     _data['confirmPassword'] = confirmPassword;
     return _data;
@@ -92,6 +96,7 @@ class Result {
     required this.country,
     required this.email,
     required this.password,
+    required this.website,
     required this.companyFields,
     required this.id,
     required this.createdAt,
@@ -107,6 +112,7 @@ class Result {
   late final String country;
   late final String email;
   late final String password;
+  late final String website;
   late final List<String> companyFields;
   late final String id;
   late final String createdAt;
@@ -123,6 +129,7 @@ class Result {
     country = json['country'];
     email = json['email'];
     password = json['password'];
+    website = json['website'];
     companyFields = List.castFrom<dynamic, String>(json['companyFields']);
     id = json['_id'];
     createdAt = json['createdAt'];
@@ -141,6 +148,7 @@ class Result {
     _data['country'] = country;
     _data['email'] = email;
     _data['password'] = password;
+    _data['website'] = website;
     _data['companyFields'] = companyFields;
     _data['_id'] = id;
     _data['createdAt'] = createdAt;

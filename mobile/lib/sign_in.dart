@@ -264,9 +264,6 @@ class _SignInState extends State<SignIn> with SingleTickerProviderStateMixin {
                                   password: _passwordController.text.trim());
 
                               APIService.companyLogin(model).then((response) {
-                                setState(() {
-                                  _loading = false;
-                                });
                                 if (response) {
                                   Navigator.of(context).pushNamedAndRemoveUntil(
                                     homeRoute,
@@ -282,6 +279,9 @@ class _SignInState extends State<SignIn> with SingleTickerProviderStateMixin {
                                       textColor: Colors.white,
                                       fontSize: 14.0);
                                 }
+                              });
+                              setState(() {
+                                _loading = false;
                               });
                             } catch (e) {
                               Fluttertoast.showToast(

@@ -15,8 +15,9 @@ void main() async {
   WidgetsFlutterBinding.ensureInitialized();
 
   bool _result = await SharedService.isLoggedIn();
+  bool _cresult = await CompanySharedService.isLoggedIn();
 
-  if (_result) {
+  if (_result || _cresult) {
     _defaultHome = const HomePage();
   }
 

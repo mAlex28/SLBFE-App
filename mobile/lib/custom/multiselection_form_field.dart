@@ -25,7 +25,7 @@ class MyMultiSelectionFormField<T> extends FormField<List<T>> {
                     borderRadius: BorderRadius.circular(15.0),
                     borderSide: BorderSide.none,
                   ),
-                  hintText: "Qualifications",
+                  hintText: "Fields",
                   floatingLabelStyle: const TextStyle(
                       height: 4, color: Color.fromARGB(255, 32, 156, 223)),
                   filled: true,

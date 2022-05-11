@@ -27,6 +27,7 @@ class _CompanySignUpPageState extends State<CompanySignUpPage> {
   final TextEditingController _countryController = TextEditingController();
   final TextEditingController _emailController = TextEditingController();
   final TextEditingController _passwordController = TextEditingController();
+  final TextEditingController _websiteController = TextEditingController();
   final TextEditingController _confirmPasswordController =
       TextEditingController();
 
@@ -163,6 +164,25 @@ class _CompanySignUpPageState extends State<CompanySignUpPage> {
                   borderSide: BorderSide.none,
                 ),
                 labelText: "Country",
+                floatingLabelStyle: const TextStyle(
+                    height: 4, color: Color.fromARGB(255, 32, 156, 223)),
+                filled: true,
+                fillColor: Colors.grey[300],
+                prefixIcon: const Icon(Icons.person),
+              ),
+            ),
+            const SizedBox(
+              height: 20,
+            ),
+            TextFormField(
+              validator: (value) => validate(value),
+              controller: _websiteController,
+              decoration: InputDecoration(
+                border: OutlineInputBorder(
+                  borderRadius: BorderRadius.circular(15.0),
+                  borderSide: BorderSide.none,
+                ),
+                labelText: "Website",
                 floatingLabelStyle: const TextStyle(
                     height: 4, color: Color.fromARGB(255, 32, 156, 223)),
                 filled: true,
@@ -316,8 +336,8 @@ class _CompanySignUpPageState extends State<CompanySignUpPage> {
                         email: _emailController.text.trim(),
                         companyFields: _fields,
                         password: _passwordController.text.trim(),
-                        confirmPassword:
-                            _confirmPasswordController.text.trim());
+                        confirmPassword: _confirmPasswordController.text.trim(),
+                        website: _websiteController.text.trim());
 
                     APIService.companyRegister(model).then((response) {
                       setState(() {

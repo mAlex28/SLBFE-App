@@ -16,7 +16,7 @@ class APIService {
   static Future<bool> citizenLogin(CitizenRequestLogin model) async {
     Map<String, String> requestHeaders = {'Content-Type': 'application/json'};
 
-    var url = Uri.http('192.168.1.29:5000', '/citizen/signin');
+    var url = Uri.http('192.168.1.29:5000', '/citizens/signin');
 
     var response = await client.post(url,
         headers: requestHeaders, body: jsonEncode(model.toJson()));
@@ -33,7 +33,7 @@ class APIService {
   static Future<bool> companyLogin(CompanyLoginRequest model) async {
     Map<String, String> requestHeaders = {'Content-Type': 'application/json'};
 
-    var url = Uri.http('192.168.1.29:5000', '/company/signin');
+    var url = Uri.http('192.168.1.29:5000', '/companies/signin');
 
     var response = await client.post(url,
         headers: requestHeaders, body: jsonEncode(model.toJson()));
@@ -52,7 +52,7 @@ class APIService {
       CitizenRequestRegister model) async {
     Map<String, String> requestHeaders = {'Content-Type': 'application/json'};
 
-    var url = Uri.http('192.168.1.29:5000', '/citizen/signup');
+    var url = Uri.http('192.168.1.29:5000', '/citizens/signup');
 
     var response = await client.post(url,
         headers: requestHeaders, body: jsonEncode(model.toJson()));
@@ -65,12 +65,125 @@ class APIService {
       CompanyRegisterRequest model) async {
     Map<String, String> requestHeaders = {'Content-Type': 'application/json'};
 
-    var url = Uri.http('192.168.1.29:5000', '/company/signup');
+    var url = Uri.http('192.168.1.29:5000', '/companies/signup');
 
     var response = await client.post(url,
         headers: requestHeaders, body: jsonEncode(model.toJson()));
 
     return companyRegisterResponse(response.body);
+  }
+
+  /// Update citizen
+  static Future updateCitizen(
+      citizenId, CitizenRequestRegister updateField) async {
+    var loginDetails = await SharedService.loginDetails();
+    Map<String, String> requestHeaders = {
+      'Content-Type': 'application/json',
+      'Authorization': 'Bearer ${loginDetails!.token}'
+    };
+
+    var url = Uri.http('192.168.1.29:5000', '/citizens/$citizenId');
+
+    var response = await client.patch(url,
+        headers: requestHeaders, body: jsonEncode(updateField.toJson()));
+
+    if (response.statusCode != 404) {
+      Fluttertoast.showToast(
+          msg: 'Successfully updated citizen',
+          toastLength: Toast.LENGTH_LONG,
+          gravity: ToastGravity.BOTTOM,
+          timeInSecForIosWeb: 1,
+          backgroundColor: Colors.grey,
+          textColor: Colors.white,
+          fontSize: 14.0);
+    } else {
+      Fluttertoast.showToast(
+          msg: 'Error updating',
+          toastLength: Toast.LENGTH_SHORT,
+          gravity: ToastGravity.BOTTOM,
+          timeInSecForIosWeb: 1,
+          backgroundColor: Colors.grey,
+          textColor: Colors.white,
+          fontSize: 14.0);
+    }
+  }
+
+  /// Update company
+  static Future updateCompany(companyid, updateField) async {
+    var loginDetails = await SharedService.loginDetails();
+    Map<String, String> requestHeaders = {
+      'Content-Type': 'application/json',
+      'Authorization': 'Bearer ${loginDetails!.token}'
+    };
+
+    var url = Uri.http('192.168.1.29:5000', '/companies/$companyid');
+
+    var response = await client.patch(url,
+        headers: requestHeaders, body: jsonEncode(updateField.toJson()));
+
+    if (response.statusCode != 404) {
+      Fluttertoast.showToast(
+          msg: 'Successfully updated company',
+          toastLength: Toast.LENGTH_LONG,
+          gravity: ToastGravity.BOTTOM,
+          timeInSecForIosWeb: 1,
+          backgroundColor: Colors.grey,
+          textColor: Colors.white,
+          fontSize: 14.0);
+    } else {
+      Fluttertoast.showToast(
+          msg: 'Error updating',
+          toastLength: Toast.LENGTH_SHORT,
+          gravity: ToastGravity.BOTTOM,
+          timeInSecForIosWeb: 1,
+          backgroundColor: Colors.grey,
+          textColor: Colors.white,
+          fontSize: 14.0);
+    }
+  }
+
+  /// Delete company
+  static Future deleteCitizen(companyid) async {
+    var loginDetails = await SharedService.loginDetails();
+    Map<String, String> requestHeaders = {
+      'Content-Type': 'application/json',
+      'Authorization': 'Bearer ${loginDetails!.token}'
+    };
+
+    var url = Uri.http('192.168.1.29:5000', '/companies/$companyid');
+
+    await client.delete(url, headers: requestHeaders);
+
+    Fluttertoast.showToast(
+        msg: 'Successfully deleted user',
+        toastLength: Toast.LENGTH_LONG,
+        gravity: ToastGravity.BOTTOM,
+        timeInSecForIosWeb: 1,
+        backgroundColor: Colors.grey,
+        textColor: Colors.white,
+        fontSize: 14.0);
+  }
+
+  /// Delete company
+  static Future deleteCompany(companyid) async {
+    var loginDetails = await SharedService.loginDetails();
+    Map<String, String> requestHeaders = {
+      'Content-Type': 'application/json',
+      'Authorization': 'Bearer ${loginDetails!.token}'
+    };
+
+    var url = Uri.http('192.168.1.29:5000', '/companies/$companyid');
+
+    await client.delete(url, headers: requestHeaders);
+
+    Fluttertoast.showToast(
+        msg: 'Successfully deleted company',
+        toastLength: Toast.LENGTH_LONG,
+        gravity: ToastGravity.BOTTOM,
+        timeInSecForIosWeb: 1,
+        backgroundColor: Colors.grey,
+        textColor: Colors.white,
+        fontSize: 14.0);
   }
 
   /// Make a complain to the officers
@@ -87,7 +200,7 @@ class APIService {
       "complainText": complainText,
     };
 
-    var url = Uri.http('192.168.1.29:5000', '/citizen/complains');
+    var url = Uri.http('192.168.1.29:5000', '/citizens/complains');
     var response =
         await client.post(url, headers: requestHeaders, body: jsonEncode(body));
 
@@ -103,7 +216,7 @@ class APIService {
           fontSize: 14.0);
     } else {
       Fluttertoast.showToast(
-          msg: 'Error: Complaint node made.',
+          msg: 'Error: Complaint not made.',
           toastLength: Toast.LENGTH_SHORT,
           gravity: ToastGravity.BOTTOM,
           timeInSecForIosWeb: 1,

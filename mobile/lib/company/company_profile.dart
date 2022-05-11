@@ -6,16 +6,16 @@ import 'package:fluttertoast/fluttertoast.dart';
 import 'package:url_launcher/url_launcher.dart';
 
 class CompanyProfilePage extends StatefulWidget {
-  final dynamic citizen;
+  final dynamic company;
 
-  const CompanyProfilePage({Key? key, this.citizen}) : super(key: key);
+  const CompanyProfilePage({Key? key, this.company}) : super(key: key);
 
   @override
   State<CompanyProfilePage> createState() => _CompanyProfilePageState();
 }
 
 class _CompanyProfilePageState extends State<CompanyProfilePage> {
-  final _baseUrl = 'http://192.168.1.29:5000/citizen';
+  final _baseUrl = 'http://192.168.1.29:5000/companies';
 
   @override
   void initState() {
@@ -67,7 +67,7 @@ class _CompanyProfilePageState extends State<CompanyProfilePage> {
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
                 Text(
-                  "${widget.citizen['companyName']}",
+                  "${widget.company['companyName']}",
                   style: const TextStyle(
                       fontSize: 20.0,
                       color: Colors.blueGrey,
@@ -80,7 +80,7 @@ class _CompanyProfilePageState extends State<CompanyProfilePage> {
               height: 10,
             ),
             Text(
-              "${widget.citizen['province']}, ${widget.citizen['country']}",
+              "${widget.company['province']}, ${widget.company['country']}",
               style: const TextStyle(
                   fontSize: 15.0,
                   color: Colors.black45,
@@ -107,11 +107,11 @@ class _CompanyProfilePageState extends State<CompanyProfilePage> {
                                     physics:
                                         const NeverScrollableScrollPhysics(),
                                     itemCount:
-                                        widget.citizen['companyFields'].length,
+                                        widget.company['companyFields'].length,
                                     itemBuilder: (context, index) {
                                       return ListTile(
                                         title: Text(widget
-                                            .citizen['companyFields'][index]),
+                                            .company['companyFields'][index]),
                                       );
                                     })));
                       });
@@ -130,7 +130,7 @@ class _CompanyProfilePageState extends State<CompanyProfilePage> {
                 padding:
                     const EdgeInsets.symmetric(vertical: 10, horizontal: 10),
                 child: Text(
-                  "${widget.citizen['description']}",
+                  "${widget.company['description']}",
                   style: const TextStyle(fontWeight: FontWeight.w300),
                 )),
             Row(
@@ -139,7 +139,7 @@ class _CompanyProfilePageState extends State<CompanyProfilePage> {
                 TextButton.icon(
                     onPressed: () {
                       try {
-                        _launchPhoneCall('tel:${widget.citizen['contact']}');
+                        _launchPhoneCall('tel:${widget.company['contact']}');
                       } catch (e) {
                         Fluttertoast.showToast(
                             msg: 'Could not launch phone',
@@ -156,7 +156,7 @@ class _CompanyProfilePageState extends State<CompanyProfilePage> {
                 TextButton.icon(
                     onPressed: () {
                       try {
-                        _launchEmail('mailto:${widget.citizen['email']}');
+                        _launchEmail('mailto:${widget.company['email']}');
                       } catch (e) {
                         Fluttertoast.showToast(
                             msg: 'Could not launch email',
@@ -173,7 +173,7 @@ class _CompanyProfilePageState extends State<CompanyProfilePage> {
                 TextButton.icon(
                     onPressed: () {
                       String addressToCopy =
-                          '${widget.citizen['address']}, ${widget.citizen['city']}, ${widget.citizen['province']}, ${widget.citizen['country']}';
+                          '${widget.company['address']}, ${widget.company['city']}, ${widget.company['province']}, ${widget.company['country']}';
 
                       Clipboard.setData(ClipboardData(text: addressToCopy));
                       Fluttertoast.showToast(

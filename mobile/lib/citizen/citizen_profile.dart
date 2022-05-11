@@ -21,7 +21,7 @@ class _CitizenProfilePageState extends State<CitizenProfilePage> {
       CachedImageBase64Manager.instance();
 
   final String _imagePath = 'assets/images/logo.png';
-  final _baseUrl = 'http://192.168.1.29:5000/citizen';
+  final _baseUrl = 'http://192.168.1.29:5000/citizens';
 
   @override
   void initState() {

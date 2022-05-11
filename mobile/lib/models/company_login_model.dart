@@ -57,6 +57,7 @@ class Result {
     required this.country,
     required this.email,
     required this.password,
+    required this.website,
     required this.companyFields,
     required this.createdAt,
     required this.updatedAt,
@@ -72,6 +73,7 @@ class Result {
   late final String country;
   late final String email;
   late final String password;
+  late final String website;
   late final List<String> companyFields;
   late final String createdAt;
   late final String updatedAt;
@@ -88,6 +90,7 @@ class Result {
     country = json['country'];
     email = json['email'];
     password = json['password'];
+    website = json['website'];
     companyFields = List.castFrom<dynamic, String>(json['companyFields']);
     createdAt = json['createdAt'];
     updatedAt = json['updatedAt'];
@@ -106,6 +109,7 @@ class Result {
     _data['country'] = country;
     _data['email'] = email;
     _data['password'] = password;
+    _data['website'] = website;
     _data['companyFields'] = companyFields;
     _data['createdAt'] = createdAt;
     _data['updatedAt'] = updatedAt;

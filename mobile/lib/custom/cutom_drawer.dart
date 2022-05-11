@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:mobile/profile/profile.dart';
 import 'package:mobile/routes/routes.dart';
 import 'package:mobile/services/api_services.dart';
 import 'package:mobile/services/shared_services.dart';
@@ -134,7 +135,12 @@ class _CustomDrawerState extends State<CustomDrawer> {
           leading: const Icon(Icons.account_circle_rounded),
           title: const Text('Profile'),
           onTap: () {
-            Navigator.pop(context); // close the drawer
+            Navigator.push(
+                context,
+                MaterialPageRoute(
+                    builder: (context) => const UserProfilePage(
+                          isCompany: false,
+                        )));
           },
         ),
         ListTile(

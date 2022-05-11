@@ -15,7 +15,7 @@ class CompanyHomePage extends StatefulWidget {
 }
 
 class _CompanyHomePageState extends State<CompanyHomePage> {
-  final _baseUrl = 'http://192.168.1.29:5000/company';
+  final _baseUrl = 'http://192.168.1.29:5000/companies';
 
   int _page = 1;
   bool _hasNextPage = true;
@@ -138,7 +138,7 @@ class _CompanyHomePageState extends State<CompanyHomePage> {
                               context,
                               MaterialPageRoute(
                                   builder: (context) => CompanyProfilePage(
-                                        citizen: _companies[index],
+                                        company: _companies[index],
                                       )));
                         },
                         child: Card(
@@ -167,7 +167,7 @@ class _CompanyHomePageState extends State<CompanyHomePage> {
                                       children: List.from(
                                         _companies[index]['companyFields'].map(
                                           (value) => Text(
-                                            '$value,',
+                                            '${value.split(',')}',
                                             style: const TextStyle(
                                                 color: Colors.grey),
                                             maxLines: 2,

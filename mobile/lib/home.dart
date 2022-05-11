@@ -15,7 +15,7 @@ class HomePage extends StatefulWidget {
 }
 
 class _HomePageState extends State<HomePage> {
-  final _baseUrl = 'http://192.168.1.29:5000/citizen';
+  final _baseUrl = 'http://192.168.1.29:5000/citizens';
 
   int _page = 1;
   bool _hasNextPage = true;
@@ -178,7 +178,7 @@ class _HomePageState extends State<HomePage> {
                                       children: List.from(
                                         _citizens[index]['qualifications'].map(
                                           (value) => Text(
-                                            '$value,',
+                                            '${value.split(',')}',
                                             style: const TextStyle(
                                                 color: Colors.grey),
                                             maxLines: 2,
