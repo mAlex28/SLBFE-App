@@ -1,6 +1,6 @@
 # SLBFE-App
 
-API is hosted in - https://slbfe-api-app.herokuapp.com/
+API is hosted in - https://slbfe-api-app.herokuapp.com/  
 Web client is hosted in - https://slbfe-webapp.netlify.app/
 
 ### How to run
