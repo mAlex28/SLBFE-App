@@ -2,7 +2,7 @@ import axios from 'axios';
 
 // hosted URL: https://slbfe-api-app.herokuapp.com/ - replace this with following baseURL to use the deployed version
 // Please note: Deployed version only resturn JSON reponses
-const API = axios.create({ baseURL: 'http://localhost:5000' });
+const API = axios.create({ baseURL: 'https://slbfe-api-app.herokuapp.com' });
 
 API.interceptors.request.use((req) => {
   if (localStorage.getItem('profile')) {

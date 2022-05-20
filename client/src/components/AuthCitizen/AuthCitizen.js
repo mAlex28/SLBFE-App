@@ -107,7 +107,6 @@ const SignUp = () => {
         if (isSignup) {
             if (!isError) {
                 setIsError(false)
-
                 dispatch(signup(form, history))
             } else {
                 setIsError(true)
@@ -120,7 +119,7 @@ const SignUp = () => {
     const handleChange = (e) =>
         setForm({ ...form, [e.target.name]: e.target.value })
 
-    const handleAddChip = (tag) => setForm({ ...form, qualifications: tag });
+    const handleAddChip = (tag) => setForm({ ...form, qualifications: [...form.qualifications, tag] });
 
     const handleDeleteChip = (chipToDelete) => setForm({ ...form, qualifications: form.qualifications.filter((tag) => tag !== chipToDelete) });
 
@@ -253,6 +252,7 @@ const SignUp = () => {
                                         onDelete={(chip) => handleDeleteChip(chip)}
                                         label="Qualifications"
                                         variant="outlined"
+                                        value={form.qualifications}
                                     />
                                 </Grid>
                             </>

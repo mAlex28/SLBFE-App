@@ -3,6 +3,7 @@ import bodyParser from 'body-parser'
 import mongoose from 'mongoose'
 import cors from 'cors'
 import dotenv from 'dotenv'
+import path from 'path'
 
 import companyRoutes from './routes/companyRoutes.js'
 import citizenRoutes from './routes/citizenRoutes.js'
@@ -22,8 +23,10 @@ app.use('/companies', companyRoutes)
 app.use('/officers', officerRoutes)
 app.use('/complains', complainRoutes)
 
+const __dirname = path.resolve()
+
 app.get('/', (req, res) => {
-  res.send('API is running')
+  res.sendFile(path.join(__dirname, '/index.html'))
 })
 
 const PORT = process.env.PORT || 5000
