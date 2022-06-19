@@ -2,7 +2,7 @@
 
 API is hosted in - https://slbfe-api-app.herokuapp.com/  
 Web client is hosted in - https://slbfe-webapp.netlify.app/
-API documentation - 
+API documentation - https://documenter.getpostman.com/view/14803467/UyxgHnA7
 
 ### How to run
 Clone and move to the root directory
