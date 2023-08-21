@@ -1,5 +1,9 @@
 # SLBFE-App
 
+```diff
+- API is not working anymore because heroku free version is not available
+```
+
 API is hosted in - https://slbfe-api-app.herokuapp.com/  
 Web client is hosted in - https://slbfe-webapp.netlify.app/  
 API documentation - https://documenter.getpostman.com/view/14803467/UyxgHnA7
